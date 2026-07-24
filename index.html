@@ -46,24 +46,25 @@
             margin: 0 auto;
         }
 
-        /* STRICT SINGLE A4 PAGE CONTAINER */
+        /* FULL-BLEED EXACT A4 PAPER SIZE */
         .letterhead-paper {
             width: 210mm;
-            height: 296mm;
-            max-height: 296mm;
+            height: 297mm;
+            max-height: 297mm;
             margin: 0 auto;
             position: relative;
             box-shadow: 0 12px 35px rgba(0, 0, 0, 0.2);
             background-color: #FFFFFF;
             
+            /* EDGE-TO-EDGE BACKGROUND FIT */
             background-image: url('bg.jpg'); 
-            background-size: 100% 100%; 
-            background-repeat: no-repeat;
-            background-position: center top;
+            background-size: 100% 100% !important; 
+            background-repeat: no-repeat !important;
+            background-position: center top !important;
             
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
+            justify-content: flex-start;
             overflow: hidden !important;
             page-break-inside: avoid !important;
             page-break-after: avoid !important;
@@ -95,7 +96,6 @@
             display: grid;
             grid-template-columns: 1fr 200px;
             gap: 10px;
-            /* Raiwind, Lahore. کے بعد لائن کا فاصلہ */
             margin-bottom: 20px; 
             align-items: start;
         }
@@ -172,7 +172,6 @@
             font-weight: 700;
             color: var(--navy-dark);
             display: block;
-            /* Dear Sir/Ma'am کے بعد فاصلہ */
             margin-bottom: 8px; 
         }
 
@@ -248,7 +247,6 @@
 
         /* AMOUNT IN WORDS */
         .words-container {
-            /* Amount in Words کی پوری لائن کے بعد فاصلہ */
             margin-bottom: 20px; 
             font-size: 0.78rem;
             color: var(--navy-dark);
@@ -274,7 +272,6 @@
             font-size: 0.78rem;
             line-height: 1.35;
             color: #334155;
-            /* We assure you that... کے بعد 2 لائن کا فاصلہ (approx 32px) */
             margin-bottom: 32px; 
         }
 
@@ -347,17 +344,19 @@
             box-shadow: none;
         }
 
+        /* PRINT STYLES FOR ZERO MARGIN / NO WHITE BORDER */
         @media print {
+            @page {
+                size: A4 portrait;
+                margin: 0 !important; /* REMOVES DEFAULT PRINT MARGINS */
+            }
             html, body {
+                width: 210mm !important;
                 height: 297mm !important;
                 overflow: hidden !important;
                 padding: 0 !important;
                 margin: 0 !important;
                 background: #FFF !important;
-            }
-            @page {
-                size: A4 portrait;
-                margin: 0;
             }
             .control-toolbar { display: none !important; }
             .field-label { display: none !important; }
@@ -366,8 +365,8 @@
             .letterhead-paper { 
                 box-shadow: none !important; 
                 width: 210mm !important; 
-                height: 296mm !important;
-                max-height: 296mm !important;
+                height: 297mm !important;
+                max-height: 297mm !important;
                 page-break-after: avoid !important;
                 page-break-inside: avoid !important;
             }
@@ -552,7 +551,7 @@
                 document.querySelectorAll('textarea.desc').forEach(autoResizeTextarea);
             });
 
-            // STRICT SINGLE PAGE PDF GENERATION
+            // FIXED: NO WHITE BORDER PDF OPTION
             document.getElementById('btn-pdf').addEventListener('click', () => {
                 const pdfBtn = document.getElementById('btn-pdf');
                 pdfBtn.textContent = 'Generating PDF...';
@@ -566,15 +565,16 @@
                 const filename = `Quotation_${clientName.replace(/[^a-zA-Z0-9]/g, '_')}.pdf`;
 
                 const opt = {
-                    margin:       0,
+                    margin:       [0, 0, 0, 0], // ZERO MARGIN FOR NO WHITE BORDERS
                     filename:     filename,
-                    image:        { type: 'jpeg', quality: 0.98 },
+                    image:        { type: 'jpeg', quality: 1.0 },
                     html2canvas:  { 
-                        scale: 2, 
+                        scale: 3, // HIGH RESOLUTION RENDER
                         useCORS: true, 
                         logging: false,
                         scrollX: 0,
-                        scrollY: 0
+                        scrollY: 0,
+                        windowWidth: element.offsetWidth
                     },
                     jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
                     pagebreak:    { mode: 'none' }
