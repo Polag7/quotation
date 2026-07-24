@@ -43,10 +43,10 @@
             margin: 0 auto;
         }
 
-        /* PERFECT EXACT A4 RATIO CONTAINER */
+        /* FIXED EXACT A4 PAGE HEIGHT TO PREVENT 2ND BLANK PAGE */
         .letterhead-paper {
             width: 210mm;
-            min-height: 297mm;
+            height: 297mm; /* Strictly 1 Page Height */
             margin: 0 auto;
             position: relative;
             box-shadow: 0 12px 35px rgba(0, 0, 0, 0.2);
@@ -60,22 +60,23 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
+            overflow: hidden; /* Stops overflowing content from creating extra page */
         }
 
-        /* SAFE INNER PADDING */
+        /* OPTIMIZED INNER PADDING */
         .letter-content {
-            padding: 250px 40px 100px 40px; 
+            padding: 230px 40px 60px 40px; 
             position: relative;
             z-index: 10;
         }
 
         .document-title {
             text-align: center;
-            font-size: 1.4rem;
+            font-size: 1.3rem;
             font-weight: 800;
             color: var(--navy-dark);
             letter-spacing: 3px;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
             text-transform: uppercase;
         }
 
@@ -84,12 +85,12 @@
             display: grid;
             grid-template-columns: 1fr 200px;
             gap: 12px;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
             align-items: start;
         }
 
         .field-group {
-            margin-bottom: 3px;
+            margin-bottom: 2px;
         }
 
         .field-label {
@@ -104,7 +105,7 @@
             width: 100%;
             font-family: inherit;
             font-size: 0.85rem;
-            padding: 3px 6px;
+            padding: 2px 5px;
             border: 1px solid var(--border-color);
             border-radius: 4px;
             background: rgba(255, 255, 255, 0.85);
@@ -118,13 +119,13 @@
             overflow: hidden;
             white-space: pre-wrap;
             word-wrap: break-word;
-            min-height: 26px;
+            min-height: 24px;
             line-height: 1.3;
             display: block;
         }
 
         #client-name {
-            font-size: 1rem !important;
+            font-size: 0.95rem !important;
             font-weight: 700 !important;
             color: var(--navy-dark);
         }
@@ -148,11 +149,11 @@
             box-shadow: 0 0 0 3px rgba(197, 155, 39, 0.15);
         }
 
-        /* INTRO TEXT & SALUTATION SPACING FIX */
+        /* INTRO TEXT & SALUTATION */
         .intro-text {
             font-size: 0.82rem;
-            line-height: 1.4;
-            margin-bottom: 16px;
+            line-height: 1.35;
+            margin-bottom: 12px;
             color: #334155;
         }
 
@@ -162,9 +163,8 @@
             display: block;
         }
 
-        /* Added 1 line gap after salutation before intro text */
         .intro-text p {
-            margin-top: 14px; 
+            margin-top: 10px; 
         }
 
         /* TABLE STYLING */
@@ -185,7 +185,7 @@
         .items-table th {
             background-color: var(--navy-dark) !important;
             color: #FFFFFF !important;
-            padding: 6px 8px;
+            padding: 5px 8px;
             text-align: left;
             font-weight: 600;
             font-size: 0.72rem;
@@ -195,7 +195,7 @@
         }
 
         .items-table td {
-            padding: 5px 8px;
+            padding: 4px 8px;
             border-bottom: 1px solid var(--border-color);
             vertical-align: top;
         }
@@ -205,9 +205,9 @@
             border-top: 2px solid var(--navy-dark);
             background-color: rgba(248, 250, 252, 0.95);
             font-weight: 800;
-            font-size: 0.88rem;
+            font-size: 0.85rem;
             color: var(--navy-dark);
-            padding: 6px 8px;
+            padding: 5px 8px;
         }
 
         .col-amount {
@@ -239,9 +239,9 @@
             background-color: #FEF2F2;
         }
 
-        /* AMOUNT IN WORDS - 1 line gap below */
+        /* AMOUNT IN WORDS - Balanced spacing */
         .words-container {
-            margin-bottom: 28px;
+            margin-bottom: 20px;
             font-size: 0.8rem;
             color: var(--navy-dark);
         }
@@ -261,17 +261,17 @@
             font-style: italic;
         }
 
-        /* CLOSING TEXT BLOCK - 1 line gap below */
+        /* CLOSING TEXT BLOCK - Balanced spacing */
         .closing-text-block {
             font-size: 0.8rem;
-            line-height: 1.4;
+            line-height: 1.35;
             color: #334155;
-            margin-top: 10px;
-            margin-bottom: 28px;
+            margin-top: 8px;
+            margin-bottom: 20px;
         }
 
         .signatory-block {
-            margin-top: 10px;
+            margin-top: 8px;
             margin-bottom: 5px;
         }
 
@@ -357,7 +357,7 @@
             .letterhead-paper { 
                 box-shadow: none !important; 
                 width: 210mm !important; 
-                min-height: 297mm !important;
+                height: 297mm !important;
             }
         }
     </style>
@@ -540,7 +540,7 @@
                 document.querySelectorAll('textarea.desc').forEach(autoResizeTextarea);
             });
 
-            // FIXED HTML2PDF GENERATION WITH FULL CANVAS RENDER
+            // FIXED HTML2PDF GENERATION TO PREVENT 2ND PAGE
             document.getElementById('btn-pdf').addEventListener('click', () => {
                 const pdfBtn = document.getElementById('btn-pdf');
                 pdfBtn.textContent = 'Generating PDF...';
@@ -565,7 +565,8 @@
                         scrollY: 0,
                         windowWidth: document.documentElement.offsetWidth
                     },
-                    jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+                    jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
+                    pagebreak:    { mode: 'avoid-all' }
                 };
 
                 if (typeof html2pdf !== 'undefined') {
