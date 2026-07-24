@@ -148,19 +148,23 @@
             box-shadow: 0 0 0 3px rgba(197, 155, 39, 0.15);
         }
 
-        /* INTRO TEXT & SALUTATION SPACING */
+        /* INTRO TEXT & SALUTATION SPACING FIX */
         .intro-text {
             font-size: 0.82rem;
             line-height: 1.4;
-            margin-bottom: 12px;
+            margin-bottom: 16px;
             color: #334155;
         }
 
         .salutation {
             font-weight: 700;
             color: var(--navy-dark);
-            margin-bottom: 16px;
             display: block;
+        }
+
+        /* Added 1 line gap after salutation before intro text */
+        .intro-text p {
+            margin-top: 14px; 
         }
 
         /* TABLE STYLING */
@@ -235,9 +239,9 @@
             background-color: #FEF2F2;
         }
 
-        /* AMOUNT IN WORDS - Gap of 1 line added below */
+        /* AMOUNT IN WORDS - 1 line gap below */
         .words-container {
-            margin-bottom: 28px; /* Increased to create a 1-line gap */
+            margin-bottom: 28px;
             font-size: 0.8rem;
             color: var(--navy-dark);
         }
@@ -257,13 +261,13 @@
             font-style: italic;
         }
 
-        /* CLOSING TEXT BLOCK - Gap of 1 line added below */
+        /* CLOSING TEXT BLOCK - 1 line gap below */
         .closing-text-block {
             font-size: 0.8rem;
             line-height: 1.4;
             color: #334155;
             margin-top: 10px;
-            margin-bottom: 28px; /* Increased to create a 1-line gap */
+            margin-bottom: 28px;
         }
 
         .signatory-block {
