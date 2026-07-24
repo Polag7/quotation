@@ -23,19 +23,22 @@
         }
 
         *, *::before, *::after {
-            box-sizing: border-box;
+            box-sizing: border-box !important;
             margin: 0;
             padding: 0;
         }
 
-        body {
-            font-family: 'Montserrat', sans-serif;
+        html, body {
+            height: 100%;
             background-color: var(--bg-page);
+            font-family: 'Montserrat', sans-serif;
             color: var(--text-main);
-            padding: 20px 10px 120px 10px;
             -webkit-print-color-adjust: exact !important;
             print-color-adjust: exact !important;
-            color-adjust: exact !important;
+        }
+
+        body {
+            padding: 20px 10px 120px 10px;
         }
 
         .app-container {
@@ -43,10 +46,11 @@
             margin: 0 auto;
         }
 
-        /* FIXED A4 PAGE HEIGHT TO PREVENT 2ND BLANK PAGE */
+        /* STRICT SINGLE A4 PAGE CONTAINER */
         .letterhead-paper {
             width: 210mm;
-            height: 297mm;
+            height: 296mm; /* Kept slightly under 297mm to guarantee zero page-overflow */
+            max-height: 296mm;
             margin: 0 auto;
             position: relative;
             box-shadow: 0 12px 35px rgba(0, 0, 0, 0.2);
@@ -60,23 +64,29 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            overflow: hidden;
+            overflow: hidden !important;
+            page-break-inside: avoid !important;
+            page-break-after: avoid !important;
+            page-break-before: avoid !important;
         }
 
-        /* INCREASED TOP PADDING TO 280px SO 'QUOTATION' DOES NOT OVERLAP HEADER DESIGN */
         .letter-content {
-            padding: 280px 40px 40px 40px; 
+            padding: 275px 40px 30px 40px; 
             position: relative;
             z-index: 10;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            justify-content: flex-start;
         }
 
         .document-title {
             text-align: center;
-            font-size: 1.3rem;
+            font-size: 1.25rem;
             font-weight: 800;
             color: var(--navy-dark);
             letter-spacing: 3px;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
             text-transform: uppercase;
         }
 
@@ -84,8 +94,8 @@
         .meta-grid {
             display: grid;
             grid-template-columns: 1fr 200px;
-            gap: 12px;
-            margin-bottom: 12px;
+            gap: 10px;
+            margin-bottom: 10px;
             align-items: start;
         }
 
@@ -94,7 +104,7 @@
         }
 
         .field-label {
-            font-size: 0.72rem;
+            font-size: 0.7rem;
             font-weight: 700;
             color: var(--navy-dark);
             display: block;
@@ -104,8 +114,8 @@
         .input-editable {
             width: 100%;
             font-family: inherit;
-            font-size: 0.85rem;
-            padding: 2px 5px;
+            font-size: 0.82rem;
+            padding: 2px 4px;
             border: 1px solid var(--border-color);
             border-radius: 4px;
             background: rgba(255, 255, 255, 0.85);
@@ -119,24 +129,24 @@
             overflow: hidden;
             white-space: pre-wrap;
             word-wrap: break-word;
-            min-height: 24px;
-            line-height: 1.3;
+            min-height: 22px;
+            line-height: 1.25;
             display: block;
         }
 
         #client-name {
-            font-size: 0.95rem !important;
+            font-size: 0.9rem !important;
             font-weight: 700 !important;
             color: var(--navy-dark);
         }
 
         #client-address {
-            font-size: 0.82rem;
+            font-size: 0.8rem;
             color: #475569;
         }
 
         .date-display {
-            font-size: 0.85rem;
+            font-size: 0.82rem;
             font-weight: 700;
             color: var(--navy-dark);
             text-align: right;
@@ -151,9 +161,9 @@
 
         /* INTRO TEXT & SALUTATION */
         .intro-text {
-            font-size: 0.82rem;
-            line-height: 1.35;
-            margin-bottom: 12px;
+            font-size: 0.8rem;
+            line-height: 1.3;
+            margin-bottom: 10px;
             color: #334155;
         }
 
@@ -164,22 +174,22 @@
         }
 
         .intro-text p {
-            margin-top: 10px; 
+            margin-top: 4px; 
         }
 
-        /* TABLE STYLING WITH EXACT 15% COLUMNS */
+        /* TABLE STYLING - EXACT 15% COLUMNS */
         .table-container {
             border: 1px solid var(--border-color);
             border-radius: 4px;
             overflow: hidden;
             background: rgba(255, 255, 255, 0.95);
-            margin-bottom: 12px;
+            margin-bottom: 10px;
         }
 
         .items-table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 0.8rem;
+            font-size: 0.78rem;
         }
 
         .items-table th {
@@ -188,16 +198,16 @@
             padding: 5px 8px;
             text-align: left;
             font-weight: 600;
-            font-size: 0.72rem;
+            font-size: 0.7rem;
             text-transform: uppercase;
             letter-spacing: 0.5px;
             -webkit-print-color-adjust: exact;
         }
 
         .items-table td {
-            padding: 4px 8px;
+            padding: 3px 8px;
             border-bottom: 1px solid var(--border-color);
-            vertical-align: top;
+            vertical-align: middle;
         }
 
         .items-table tfoot tr td {
@@ -205,23 +215,21 @@
             border-top: 2px solid var(--navy-dark);
             background-color: rgba(248, 250, 252, 0.95);
             font-weight: 800;
-            font-size: 0.85rem;
+            font-size: 0.82rem;
             color: var(--navy-dark);
-            padding: 5px 8px;
+            padding: 4px 8px;
         }
 
         .col-amount {
             text-align: right;
             font-weight: 700;
             color: var(--navy-dark);
-            padding-right: 10px !important;
-            vertical-align: middle !important;
+            padding-right: 8px !important;
         }
 
         .col-action {
             text-align: center;
-            width: 35px;
-            vertical-align: middle !important;
+            width: 30px;
         }
 
         .btn-del-row {
@@ -241,19 +249,19 @@
 
         /* AMOUNT IN WORDS */
         .words-container {
-            margin-bottom: 16px;
-            font-size: 0.8rem;
+            margin-bottom: 12px;
+            font-size: 0.78rem;
             color: var(--navy-dark);
         }
 
         .words-label {
-            font-size: 0.68rem;
+            font-size: 0.65rem;
             font-weight: 700;
             color: #64748B;
             text-transform: uppercase;
             letter-spacing: 0.5px;
             display: block;
-            margin-bottom: 2px;
+            margin-bottom: 1px;
         }
 
         .words-val {
@@ -263,22 +271,21 @@
 
         /* CLOSING TEXT BLOCK */
         .closing-text-block {
-            font-size: 0.8rem;
-            line-height: 1.35;
+            font-size: 0.78rem;
+            line-height: 1.3;
             color: #334155;
-            margin-top: 8px;
-            margin-bottom: 16px;
+            margin-bottom: 12px;
         }
 
         .signatory-block {
-            margin-top: 8px;
-            margin-bottom: 5px;
+            margin-top: auto;
+            padding-bottom: 10px;
         }
 
         .signatory-name {
             font-weight: 700;
             color: var(--navy-dark);
-            font-size: 0.88rem;
+            font-size: 0.85rem;
             margin-top: 2px;
         }
 
@@ -318,7 +325,7 @@
         .btn-outline { background: transparent; color: #FFF; border: 1px solid #475569; }
         .btn-outline:hover { background: #1E293B; }
 
-        /* PREVIEW MODE STYLES */
+        /* PREVIEW & PRINT STYLES */
         body.preview-mode .field-label {
             display: none !important; 
         }
@@ -340,15 +347,16 @@
         }
 
         @media print {
+            html, body {
+                height: 297mm !important;
+                overflow: hidden !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                background: #FFF !important;
+            }
             @page {
                 size: A4 portrait;
                 margin: 0;
-            }
-            body {
-                padding: 0 !important;
-                background: #FFF !important;
-                -webkit-print-color-adjust: exact !important;
-                print-color-adjust: exact !important;
             }
             .control-toolbar { display: none !important; }
             .field-label { display: none !important; }
@@ -357,7 +365,10 @@
             .letterhead-paper { 
                 box-shadow: none !important; 
                 width: 210mm !important; 
-                height: 297mm !important;
+                height: 296mm !important;
+                max-height: 296mm !important;
+                page-break-after: avoid !important;
+                page-break-inside: avoid !important;
             }
         }
     </style>
@@ -425,7 +436,7 @@
                 </div>
 
                 <div class="signatory-block">
-                    <p style="font-size: 0.8rem;">Warm regards:</p>
+                    <p style="font-size: 0.78rem;">Warm regards:</p>
                     <p class="signatory-name">Muhammad Waqar</p>
                 </div>
 
@@ -526,7 +537,6 @@
                 calculate();
             }
 
-            // CLEAN TEXT (REMOVED EXTRA BRACKETS LINE)
             addRow('Nitrile Gloves', 10, 850);
             addRow('Iron Net (Single Pack)', 5, 1200);
 
@@ -541,7 +551,7 @@
                 document.querySelectorAll('textarea.desc').forEach(autoResizeTextarea);
             });
 
-            // HTML2PDF GENERATION
+            // STRICT SINGLE PAGE PDF GENERATION
             document.getElementById('btn-pdf').addEventListener('click', () => {
                 const pdfBtn = document.getElementById('btn-pdf');
                 pdfBtn.textContent = 'Generating PDF...';
@@ -563,11 +573,10 @@
                         useCORS: true, 
                         logging: false,
                         scrollX: 0,
-                        scrollY: 0,
-                        windowWidth: document.documentElement.offsetWidth
+                        scrollY: 0
                     },
                     jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
-                    pagebreak:    { mode: 'avoid-all' }
+                    pagebreak:    { mode: 'none' } // Disables page break engine completely
                 };
 
                 if (typeof html2pdf !== 'undefined') {
