@@ -9,9 +9,6 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    
-    <!-- html2pdf.js Library -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     <style>
         :root {
@@ -45,17 +42,16 @@
             margin: 0 auto;
         }
 
-        /* STRICT A4 SIZE CONTAINER (210mm x 297mm) */
+        /* EXACT A4 DIMENSIONS IN PIXELS FOR SCREEN (794px x 1123px) */
         .letterhead-paper {
-            width: 210mm;
-            min-height: 297mm;
-            height: 297mm;
+            width: 794px;
+            height: 1123px;
             margin: 0 auto;
             position: relative;
             box-shadow: 0 12px 35px rgba(0, 0, 0, 0.2);
             background-color: #FFFFFF;
             
-            /* BACKGROUND IMAGE FIT EXACT TO A4 */
+            /* BACKGROUND IMAGE COVER */
             background-image: url('bg.jpg'); 
             background-size: 100% 100% !important; 
             background-repeat: no-repeat !important;
@@ -64,14 +60,15 @@
             overflow: hidden !important;
         }
 
-        /* CONTENT PADDING ADAPTED FOR BACKGROUND HEADER/FOOTER */
+        /* CONTENT PADDING TO KEEP TEXT SAFE INSIDE BG DESIGN */
         .letter-content {
-            padding: 210px 45px 100px 45px; 
+            padding: 260px 45px 100px 45px; 
             position: relative;
             z-index: 10;
             display: flex;
             flex-direction: column;
             box-sizing: border-box;
+            height: 100%;
         }
 
         .document-title {
@@ -89,7 +86,6 @@
             display: grid;
             grid-template-columns: 1fr 200px;
             gap: 10px;
-            /* Raiwind, Lahore. کے بعد ایک لائن کا فاصلہ */
             margin-bottom: 22px; 
             align-items: start;
         }
@@ -166,7 +162,6 @@
             font-weight: 700;
             color: var(--navy-dark);
             display: block;
-            /* Dear Sir/Ma'am کے بعد فاصلہ */
             margin-bottom: 10px; 
         }
 
@@ -237,7 +232,6 @@
 
         /* AMOUNT IN WORDS */
         .words-container {
-            /* Amount in Words کی پوری لائن کے بعد فاصلہ */
             margin-bottom: 22px; 
             font-size: 0.82rem;
             color: var(--navy-dark);
@@ -263,7 +257,6 @@
             font-size: 0.82rem;
             line-height: 1.4;
             color: #334155;
-            /* We assure you that... کے بعد 2 لائن کا فاصلہ (approx 36px) */
             margin-bottom: 36px; 
         }
 
@@ -325,11 +318,11 @@
         body.preview-mode .col-action, body.preview-mode .btn-del-row { display: none !important; }
         body.preview-mode .letterhead-paper { box-shadow: none; }
 
-        /* PRINT STYLES */
+        /* STRICT FULL-BLEED PRINT MEDIA RULES (NO CUTTING, NO WHITE BORDER) */
         @media print {
             @page {
                 size: A4 portrait;
-                margin: 0 !important;
+                margin: 0 !important; /* REQUISITE FOR ZERO WHITE MARGIN */
             }
             html, body {
                 width: 210mm !important;
@@ -337,15 +330,28 @@
                 padding: 0 !important;
                 margin: 0 !important;
                 background: #FFF !important;
+                overflow: hidden !important;
+            }
+            .app-container {
+                width: 210mm !important;
+                margin: 0 !important;
+                padding: 0 !important;
             }
             .control-toolbar { display: none !important; }
             .field-label { display: none !important; }
             .input-editable { border: none !important; background: transparent !important; padding: 0 !important; }
             .col-action, .btn-del-row { display: none !important; }
+            
             .letterhead-paper { 
                 box-shadow: none !important; 
                 width: 210mm !important; 
                 height: 297mm !important;
+                max-width: 210mm !important;
+                max-height: 297mm !important;
+                position: absolute !important;
+                left: 0 !important;
+                top: 0 !important;
+                margin: 0 !important;
             }
         }
     </style>
@@ -425,7 +431,7 @@
     <div class="control-toolbar">
         <button type="button" id="btn-add" class="btn btn-dark">+ Add Row</button>
         <button type="button" id="btn-preview" class="btn btn-outline"><span id="preview-text">Preview</span></button>
-        <button type="button" id="btn-pdf" class="btn btn-gold">Save as PDF</button>
+        <button type="button" id="btn-pdf" class="btn btn-gold">Print / Save as PDF</button>
     </div>
 
     <script>
@@ -522,53 +528,17 @@
                 document.querySelectorAll('textarea.desc').forEach(autoResizeTextarea);
             });
 
-            // ACCURATE PDF EXPORT
+            // RELIABLE PRINT / PDF EXPORT
             document.getElementById('btn-pdf').addEventListener('click', () => {
-                const pdfBtn = document.getElementById('btn-pdf');
-                pdfBtn.textContent = 'Generating PDF...';
-                pdfBtn.style.opacity = '0.7';
-
                 document.body.classList.add('preview-mode');
                 document.querySelectorAll('textarea.desc').forEach(autoResizeTextarea);
 
-                const element = document.getElementById('quotation-paper');
-                const clientName = document.getElementById('client-name').value.trim() || 'Client';
-                const filename = `Quotation_${clientName.replace(/[^a-zA-Z0-9]/g, '_')}.pdf`;
-
-                const opt = {
-                    margin:       0,
-                    filename:     filename,
-                    image:        { type: 'jpeg', quality: 0.98 },
-                    html2canvas:  { 
-                        scale: 2, 
-                        useCORS: true, 
-                        logging: false,
-                        scrollX: 0,
-                        scrollY: 0
-                    },
-                    jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
-                };
-
-                if (typeof html2pdf !== 'undefined') {
-                    html2pdf().set(opt).from(element).save().then(() => {
-                        resetPdfBtn();
-                    }).catch(err => {
-                        console.error('PDF error:', err);
-                        window.print();
-                        resetPdfBtn();
-                    });
-                } else {
+                setTimeout(() => {
                     window.print();
-                    resetPdfBtn();
-                }
-
-                function resetPdfBtn() {
-                    pdfBtn.textContent = 'Save as PDF';
-                    pdfBtn.style.opacity = '1';
                     if (!isPreview) {
                         document.body.classList.remove('preview-mode');
                     }
-                }
+                }, 150);
             });
         });
     </script>
