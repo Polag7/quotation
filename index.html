@@ -148,19 +148,18 @@
             box-shadow: 0 0 0 3px rgba(197, 155, 39, 0.15);
         }
 
-        /* INTRO TEXT & SALUTATION SPACING FIX */
+        /* INTRO TEXT & SALUTATION SPACING */
         .intro-text {
-            font-size: 0.85rem;
+            font-size: 0.82rem;
             line-height: 1.4;
             margin-bottom: 12px;
             color: #334155;
         }
 
-        /* Dear Sir/Ma'am کے بعد ایک لائن کا واضح فاصلہ */
         .salutation {
             font-weight: 700;
             color: var(--navy-dark);
-            margin-bottom: 16px; /* Increased bottom spacing */
+            margin-bottom: 16px;
             display: block;
         }
 
@@ -236,8 +235,9 @@
             background-color: #FEF2F2;
         }
 
+        /* AMOUNT IN WORDS - Gap of 1 line added below */
         .words-container {
-            margin-bottom: 12px;
+            margin-bottom: 28px; /* Increased to create a 1-line gap */
             font-size: 0.8rem;
             color: var(--navy-dark);
         }
@@ -257,12 +257,13 @@
             font-style: italic;
         }
 
+        /* CLOSING TEXT BLOCK - Gap of 1 line added below */
         .closing-text-block {
             font-size: 0.8rem;
             line-height: 1.4;
             color: #334155;
             margin-top: 10px;
-            margin-bottom: 15px;
+            margin-bottom: 28px; /* Increased to create a 1-line gap */
         }
 
         .signatory-block {
@@ -392,9 +393,9 @@
                         <thead>
                             <tr>
                                 <th>Item Description</th>
-                                <th style="width: 15%;">Qty</th>
-                                <th style="width: 15%;">Unit Price (Rs.)</th>
-                                <th style="width: 15%; text-align: right;">Total Price (Rs.)</th>
+                                <th style="width: 12%;">Qty</th>
+                                <th style="width: 25%;">Unit Price (Rs.)</th>
+                                <th style="width: 25%; text-align: right;">Total Price (Rs.)</th>
                                 <th class="col-action"></th>
                             </tr>
                         </thead>
@@ -521,7 +522,7 @@
                 calculate();
             }
 
-            addRow('Nitrile Gloves (Food Grade Material)', 10, 850);
+            addRow('Nitrile Gloves\n(Food Grade Material)', 10, 850);
             addRow('Iron Net (Single Pack)', 5, 1200);
 
             document.getElementById('btn-add').addEventListener('click', () => addRow());
