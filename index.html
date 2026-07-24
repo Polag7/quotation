@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,8 +11,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
-    <!-- html2pdf.js Library -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <!-- html2pdf.js Library with Fallback -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     <style>
         :root {
@@ -33,6 +34,10 @@
             background-color: var(--bg-page);
             color: var(--text-main);
             padding: 20px 10px 120px 10px;
+            /* CRITICAL FIX: FORCES BACKGROUND PRINTING ACROSS BROWSERS */
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+            color-adjust: exact !important;
         }
 
         .app-container {
@@ -59,20 +64,20 @@
             justify-content: space-between;
         }
 
-        /* 270px TOP PADDING FOR OPTIMAL SPACING */
+        /* SAFE PADDING: KEEPS TOP AWAY FROM LOGO & BOTTOM AWAY FROM FOOTER */
         .letter-content {
-            padding: 270px 45px 220px 45px; 
+            padding: 260px 45px 120px 45px; 
             position: relative;
             z-index: 10;
         }
 
         .document-title {
             text-align: center;
-            font-size: 1.6rem;
+            font-size: 1.5rem;
             font-weight: 800;
             color: var(--navy-dark);
             letter-spacing: 3px;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
             text-transform: uppercase;
         }
 
@@ -81,16 +86,16 @@
             display: grid;
             grid-template-columns: 1fr 220px;
             gap: 15px;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             align-items: start;
         }
 
         .field-group {
-            margin-bottom: 6px;
+            margin-bottom: 4px;
         }
 
         .field-label {
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             font-weight: 700;
             color: var(--navy-dark);
             display: block;
@@ -100,8 +105,8 @@
         .input-editable {
             width: 100%;
             font-family: inherit;
-            font-size: 0.9rem;
-            padding: 6px 10px;
+            font-size: 0.88rem;
+            padding: 4px 8px;
             border: 1px solid var(--border-color);
             border-radius: 4px;
             background: rgba(255, 255, 255, 0.85);
@@ -116,24 +121,24 @@
             overflow: hidden;
             white-space: pre-wrap;
             word-wrap: break-word;
-            min-height: 32px;
-            line-height: 1.4;
+            min-height: 28px;
+            line-height: 1.3;
             display: block;
         }
 
         #client-name {
-            font-size: 1.1rem !important;
+            font-size: 1.05rem !important;
             font-weight: 700 !important;
             color: var(--navy-dark);
         }
 
         #client-address {
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             color: #475569;
         }
 
         .date-display {
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             font-weight: 700;
             color: var(--navy-dark);
             text-align: right;
@@ -146,49 +151,50 @@
             box-shadow: 0 0 0 3px rgba(197, 155, 39, 0.15);
         }
 
-        /* INTRO TEXT WITH SPACING */
+        /* INTRO TEXT */
         .intro-text {
-            font-size: 0.875rem;
-            line-height: 1.6;
-            margin-bottom: 25px;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            margin-bottom: 18px;
             color: #334155;
         }
 
         .salutation {
             font-weight: 700;
             color: var(--navy-dark);
-            margin-bottom: 14px;
+            margin-bottom: 8px;
             display: block;
         }
 
-        /* DYNAMIC TABLE */
+        /* DYNAMIC TABLE COMPACT SPACING */
         .table-container {
             border: 1px solid var(--border-color);
             border-radius: 4px;
             overflow: hidden;
             background: rgba(255, 255, 255, 0.95);
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
 
         .items-table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 0.85rem;
+            font-size: 0.82rem;
         }
 
         .items-table th {
-            background-color: var(--navy-dark);
-            color: #FFFFFF;
-            padding: 10px;
+            background-color: var(--navy-dark) !important;
+            color: #FFFFFF !important;
+            padding: 8px 10px;
             text-align: left;
             font-weight: 600;
-            font-size: 0.78rem;
+            font-size: 0.75rem;
             text-transform: uppercase;
             letter-spacing: 0.5px;
+            -webkit-print-color-adjust: exact;
         }
 
         .items-table td {
-            padding: 8px 10px;
+            padding: 6px 8px;
             border-bottom: 1px solid var(--border-color);
             vertical-align: top;
         }
@@ -199,22 +205,22 @@
             border-top: 2px solid var(--navy-dark);
             background-color: rgba(248, 250, 252, 0.95);
             font-weight: 800;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             color: var(--navy-dark);
-            padding: 10px;
+            padding: 8px 10px;
         }
 
         .col-amount {
             text-align: right;
             font-weight: 700;
             color: var(--navy-dark);
-            padding-right: 12px !important;
+            padding-right: 10px !important;
             vertical-align: middle !important;
         }
 
         .col-action {
             text-align: center;
-            width: 40px;
+            width: 35px;
             vertical-align: middle !important;
         }
 
@@ -223,9 +229,9 @@
             border: none;
             color: #EF4444;
             font-weight: bold;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             cursor: pointer;
-            padding: 0 6px;
+            padding: 0 4px;
             border-radius: 3px;
         }
 
@@ -235,19 +241,19 @@
 
         /* AMOUNT IN WORDS BELOW TABLE */
         .words-container {
-            margin-bottom: 20px;
-            font-size: 0.875rem;
+            margin-bottom: 15px;
+            font-size: 0.95rem;
             color: var(--navy-dark);
         }
 
         .words-label {
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             font-weight: 700;
             color: #64748B;
             text-transform: uppercase;
             letter-spacing: 0.5px;
             display: block;
-            margin-bottom: 3px;
+            margin-bottom: 2px;
         }
 
         .words-val {
@@ -257,24 +263,24 @@
 
         /* CLOSING REMARKS */
         .closing-text-block {
-            font-size: 0.875rem;
-            line-height: 1.6;
+            font-size: 0.82rem;
+            line-height: 1.5;
             color: #334155;
-            margin-top: 25px;
-            margin-bottom: 30px;
+            margin-top: 15px;
+            margin-bottom: 20px;
         }
 
         /* SIGNATURE AREA */
         .signatory-block {
-            margin-top: 20px;
-            margin-bottom: 10px;
+            margin-top: 15px;
+            margin-bottom: 5px;
         }
 
         .signatory-name {
             font-weight: 700;
             color: var(--navy-dark);
-            font-size: 0.95rem;
-            margin-top: 4px;
+            font-size: 0.9rem;
+            margin-top: 3px;
         }
 
         /* CONTROL TOOLBAR */
@@ -334,16 +340,27 @@
             box-shadow: none;
         }
 
-        /* PDF GENERATION & PRINT STYLES */
-        .pdf-exporting .control-toolbar,
+        /* PRINT & EXPORT OPTIMIZATIONS WITH BACKGROUND ENFORCEMENT */
         @media print {
-            .control-toolbar {
-                display: none !important;
+            @page {
+                size: A4 portrait;
+                margin: 0;
             }
-            body { padding: 0; background: #FFF; }
+            body {
+                padding: 0 !important;
+                background: #FFF !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+            .control-toolbar { display: none !important; }
             .field-label { display: none !important; }
             .input-editable { border: none !important; background: transparent !important; padding: 0 !important; }
-            .letterhead-paper { box-shadow: none !important; width: 100% !important; }
+            .col-action, .btn-del-row { display: none !important; }
+            .letterhead-paper { 
+                box-shadow: none !important; 
+                width: 100% !important; 
+                min-height: 100vh !important;
+            }
         }
     </style>
 </head>
@@ -363,15 +380,15 @@
                     <div>
                         <div class="field-group">
                             <label class="field-label">Company Name:</label>
-                            <input type="text" id="client-name" class="input-editable" value="" placeholder="Enter Company Name...">
+                            <input type="text" id="client-name" class="input-editable" value="M/s: TAZIJ FOODS & MEAT" placeholder="Enter Company Name...">
                         </div>
                         <div class="field-group">
                             <label class="field-label">Company Address:</label>
-                            <input type="text" id="client-address" class="input-editable" value="" placeholder="Enter Company Address...">
+                            <input type="text" id="client-address" class="input-editable" value="Raiwind, Lahore." placeholder="Enter Company Address...">
                         </div>
                     </div>
                     <div class="date-display">
-                        <span id="formatted-date">Dated: July 24, 2026</span>
+                        <span id="formatted-date">Dated: Loading...</span>
                     </div>
                 </div>
 
@@ -388,8 +405,8 @@
                             <tr>
                                 <th>Item Description</th>
                                 <th style="width: 15%;">Qty</th>
-                                <th style="width: 15%;">Unit Price (Rs.)</th>
-                                <th style="width: 15%; text-align: right;">Total Price (Rs.)</th>
+                                <th style="width: 17%;">Unit Price </th>
+                                <th style="width: 17%; text-align: right;">Price (Rs.)</th>
                                 <th class="col-action"></th>
                             </tr>
                         </thead>
@@ -449,19 +466,19 @@
             const amountWordsEl = document.getElementById('amount-words');
             const formattedDateEl = document.getElementById('formatted-date');
 
-            // Format Automatic Current Date as "Dated: Month, Day, Year"
+            // Set Current Date Automatically
             const today = new Date();
             const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-            const formattedDate = `Dated: ${monthNames[today.getMonth()]}, ${today.getDate()}, ${today.getFullYear()}`;
-            formattedDateEl.textContent = formattedDate;
+            formattedDateEl.textContent = `Dated: ${monthNames[today.getMonth()]} ${today.getDate()}, ${today.getFullYear()}`;
 
-            // Auto resize Textarea as user types multiple lines
+            // Auto resize Textarea height dynamically
             function autoResizeTextarea(el) {
+                if(!el) return;
                 el.style.height = 'auto';
                 el.style.height = el.scrollHeight + 'px';
             }
 
-            // Convert Numbers to Words
+            // Convert Numbers to Words (PKR Format)
             function numToWords(n) {
                 if (n === 0) return 'Zero Rupees Only';
                 const a = ['','One ','Two ','Three ','Four ','Five ','Six ','Seven ','Eight ','Nine ','Ten ','Eleven ','Twelve ','Thirteen ','Fourteen ','Fifteen ','Sixteen ','Seventeen ','Eighteen ','Nineteen '];
@@ -482,7 +499,7 @@
                 return inWords(Math.floor(n)) + ' Rupees Only';
             }
 
-            // Calculate Amounts
+            // Calculate Totals
             function calculate() {
                 let total = 0;
                 const rows = tableBody.querySelectorAll('tr');
@@ -497,7 +514,7 @@
                 amountWordsEl.textContent = numToWords(total);
             }
 
-            // Add Row Function with Auto-wrapping Textarea
+            // Add Row Function
             function addRow(desc = '', qty = 1, rate = 0) {
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
@@ -516,10 +533,7 @@
                 const descTextarea = tr.querySelector('.desc');
                 autoResizeTextarea(descTextarea);
 
-                descTextarea.addEventListener('input', (e) => {
-                    autoResizeTextarea(e.target);
-                });
-
+                descTextarea.addEventListener('input', (e) => autoResizeTextarea(e.target));
                 tr.querySelectorAll('input').forEach(inp => inp.addEventListener('input', calculate));
                 tr.querySelector('.btn-del-row').addEventListener('click', () => {
                     if (tableBody.children.length > 1) {
@@ -530,50 +544,70 @@
                 calculate();
             }
 
-            // Event Listeners
+            // Add Default Rows
+            addRow('Nitrile Gloves (Food Grade Material)', 10, 850);
+            addRow('Iron Net (Single Pack)', 5, 1200);
+
+            // Add Row Button Listener
             document.getElementById('btn-add').addEventListener('click', () => addRow());
-            
+
+            // Toggle Preview Mode
             let isPreview = false;
             const previewBtnText = document.getElementById('preview-text');
             document.getElementById('btn-preview').addEventListener('click', function() {
                 isPreview = !isPreview;
                 document.body.classList.toggle('preview-mode', isPreview);
                 previewBtnText.textContent = isPreview ? 'Edit Mode' : 'Preview';
-                
-                // Recalculate textareas height when switching modes
                 document.querySelectorAll('textarea.desc').forEach(autoResizeTextarea);
             });
 
-            // Save PDF Logic
+            // RELIABLE PDF GENERATION LOGIC WITH FALLBACK
             document.getElementById('btn-pdf').addEventListener('click', () => {
+                const pdfBtn = document.getElementById('btn-pdf');
+                pdfBtn.textContent = 'Generating PDF...';
+                pdfBtn.style.opacity = '0.7';
+
                 document.body.classList.add('preview-mode');
-                document.body.classList.add('pdf-exporting');
-                
                 document.querySelectorAll('textarea.desc').forEach(autoResizeTextarea);
 
                 const element = document.getElementById('quotation-paper');
                 const clientName = document.getElementById('client-name').value.trim() || 'Client';
-                const filename = `Quotation_${clientName.replace(/\s+/g, '_')}.pdf`;
+                const filename = `Quotation_${clientName.replace(/[^a-zA-Z0-9]/g, '_')}.pdf`;
 
-                const opt = {
-                    margin:       0,
-                    filename:     filename,
-                    image:        { type: 'jpeg', quality: 0.98 },
-                    html2canvas:  { scale: 2, useCORS: true, logging: false },
-                    jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
-                };
+                // Check if html2pdf is present
+                if (typeof html2pdf !== 'undefined') {
+                    const opt = {
+                        margin:       0,
+                        filename:     filename,
+                        image:        { type: 'jpeg', quality: 0.98 },
+                        html2canvas:  { scale: 2, useCORS: true, logging: false },
+                        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
+                        pagebreak:    { mode: ['avoid-all', 'css', 'legacy'] }
+                    };
 
-                html2pdf().set(opt).from(element).save().then(() => {
-                    document.body.classList.remove('pdf-exporting');
+                    html2pdf().set(opt).from(element).save().then(() => {
+                        resetPdfBtn();
+                    }).catch(err => {
+                        console.error('html2pdf failed, switching to native print:', err);
+                        fallbackPrint();
+                    });
+                } else {
+                    fallbackPrint();
+                }
+
+                function fallbackPrint() {
+                    window.print();
+                    resetPdfBtn();
+                }
+
+                function resetPdfBtn() {
+                    pdfBtn.textContent = 'Save as PDF';
+                    pdfBtn.style.opacity = '1';
                     if (!isPreview) {
                         document.body.classList.remove('preview-mode');
                     }
-                });
+                }
             });
-
-            // Examples with Multi-line items
-            addRow('Nitrile Gloves\n(Food Grade Material)', 10, 850);
-            addRow('Iron Net (Single Pack)', 5, 1200);
         });
     </script>
 </body>
