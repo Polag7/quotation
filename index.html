@@ -148,6 +148,7 @@
             box-shadow: 0 0 0 3px rgba(197, 155, 39, 0.15);
         }
 
+        /* INTRO TEXT & SALUTATION SPACING FIX */
         .intro-text {
             font-size: 0.82rem;
             line-height: 1.4;
@@ -155,10 +156,11 @@
             color: #334155;
         }
 
+        /* Dear Sir/Ma'am کے بعد ایک لائن کا واضح فاصلہ */
         .salutation {
             font-weight: 700;
             color: var(--navy-dark);
-            margin-bottom: 5px;
+            margin-bottom: 16px; /* Increased bottom spacing */
             display: block;
         }
 
@@ -390,9 +392,9 @@
                         <thead>
                             <tr>
                                 <th>Item Description</th>
-                                <th style="width: 12%;">Qty</th>
-                                <th style="width: 25%;">Unit Price (Rs.)</th>
-                                <th style="width: 25%; text-align: right;">Total Price (Rs.)</th>
+                                <th style="width: 15%;">Qty</th>
+                                <th style="width: 15%;">Unit Price (Rs.)</th>
+                                <th style="width: 15%; text-align: right;">Total Price (Rs.)</th>
                                 <th class="col-action"></th>
                             </tr>
                         </thead>
@@ -519,7 +521,7 @@
                 calculate();
             }
 
-            addRow('Nitrile Gloves\n(Food Grade Material)', 10, 850);
+            addRow('Nitrile Gloves (Food Grade Material)', 10, 850);
             addRow('Iron Net (Single Pack)', 5, 1200);
 
             document.getElementById('btn-add').addEventListener('click', () => addRow());
