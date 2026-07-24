@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexus Global Traders - Official Quotation</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- html2pdf.js Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+    <style>
+        :root {
+            --navy-dark: #0A1E3F;
+            --gold-primary: #C59B27;
+            --text-main: #1E293B;
+            --border-color: #CBD5E1;
+            --bg-page: #E2E8F0;
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--bg-page);
+            color: var(--text-main);
+            padding: 20px 10px 120px 10px;
+        }
+
+        .app-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* DYNAMIC RESPONSIVE LETTERHEAD PAPER */
+        .letterhead-paper {
+            width: 100%;
+            min-height: 1130px; 
+            height: auto;
+            position: relative;
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.2);
+            background-color: #FFFFFF;
+            
+            background-image: url('bg.jpg'); 
+            background-size: 100% 100%; 
+            background-repeat: no-repeat;
+            background-position: center top;
+            
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        /* 270px TOP PADDING FOR OPTIMAL SPACING */
+        .letter-content {
+            padding: 270px 45px 220px 45px; 
+            position: relative;
+            z-index: 10;
+        }
+
+        .document-title {
+            text-align: center;
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--navy-dark);
+            letter-spacing: 3px;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+        }
+
+        /* META GRID (CLIENT & DATE) */
+        .meta-grid {
+            display: grid;
+            grid-template-columns: 1fr 220px;
+            gap: 15px;
+            margin-bottom: 25px;
+            align-items: start;
+        }
+
+        .field-group {
+            margin-bottom: 6px;
+        }
+
+        .field-label {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--navy-dark);
+            display: block;
+            margin-bottom: 2px;
+        }
+
+        .input-editable {
+            width: 100%;
+            font-family: inherit;
+            font-size: 0.9rem;
+            padding: 6px 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            background: rgba(255, 255, 255, 0.85);
+            outline: none;
+            transition: all 0.2s ease;
+            color: var(--text-main);
+        }
+
+        /* MULTI-LINE TEXTAREA FOR ITEM DESCRIPTION */
+        textarea.input-editable {
+            resize: none;
+            overflow: hidden;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            min-height: 32px;
+            line-height: 1.4;
+            display: block;
+        }
+
+        #client-name {
+            font-size: 1.1rem !important;
+            font-weight: 700 !important;
+            color: var(--navy-dark);
+        }
+
+        #client-address {
+            font-size: 0.9rem;
+            color: #475569;
+        }
+
+        .date-display {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--navy-dark);
+            text-align: right;
+            padding-top: 4px;
+        }
+
+        .input-editable:focus {
+            border-color: var(--gold-primary);
+            background: #FFFFFF;
+            box-shadow: 0 0 0 3px rgba(197, 155, 39, 0.15);
+        }
+
+        /* INTRO TEXT WITH SPACING */
+        .intro-text {
+            font-size: 0.875rem;
+            line-height: 1.6;
+            margin-bottom: 25px;
+            color: #334155;
+        }
+
+        .salutation {
+            font-weight: 700;
+            color: var(--navy-dark);
+            margin-bottom: 14px;
+            display: block;
+        }
+
+        /* DYNAMIC TABLE */
+        .table-container {
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.95);
+            margin-bottom: 20px;
+        }
+
+        .items-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+        }
+
+        .items-table th {
+            background-color: var(--navy-dark);
+            color: #FFFFFF;
+            padding: 10px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .items-table td {
+            padding: 8px 10px;
+            border-bottom: 1px solid var(--border-color);
+            vertical-align: top;
+        }
+
+        /* TABLE FOOTER FOR TOTAL */
+        .items-table tfoot tr td {
+            border-bottom: none;
+            border-top: 2px solid var(--navy-dark);
+            background-color: rgba(248, 250, 252, 0.95);
+            font-weight: 800;
+            font-size: 0.95rem;
+            color: var(--navy-dark);
+            padding: 10px;
+        }
+
+        .col-amount {
+            text-align: right;
+            font-weight: 700;
+            color: var(--navy-dark);
+            padding-right: 12px !important;
+            vertical-align: middle !important;
+        }
+
+        .col-action {
+            text-align: center;
+            width: 40px;
+            vertical-align: middle !important;
+        }
+
+        .btn-del-row {
+            background: none;
+            border: none;
+            color: #EF4444;
+            font-weight: bold;
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 0 6px;
+            border-radius: 3px;
+        }
+
+        .btn-del-row:hover {
+            background-color: #FEF2F2;
+        }
+
+        /* AMOUNT IN WORDS BELOW TABLE */
+        .words-container {
+            margin-bottom: 20px;
+            font-size: 0.875rem;
+            color: var(--navy-dark);
+        }
+
+        .words-label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #64748B;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: block;
+            margin-bottom: 3px;
+        }
+
+        .words-val {
+            font-weight: 700;
+            font-style: italic;
+        }
+
+        /* CLOSING REMARKS */
+        .closing-text-block {
+            font-size: 0.875rem;
+            line-height: 1.6;
+            color: #334155;
+            margin-top: 25px;
+            margin-bottom: 30px;
+        }
+
+        /* SIGNATURE AREA */
+        .signatory-block {
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        .signatory-name {
+            font-weight: 700;
+            color: var(--navy-dark);
+            font-size: 0.95rem;
+            margin-top: 4px;
+        }
+
+        /* CONTROL TOOLBAR */
+        .control-toolbar {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(10, 30, 63, 0.95);
+            backdrop-filter: blur(8px);
+            padding: 10px 24px;
+            border-radius: 40px;
+            display: flex;
+            gap: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+        }
+
+        .btn {
+            padding: 8px 18px;
+            border-radius: 30px;
+            border: none;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-gold { background: var(--gold-primary); color: #FFF; }
+        .btn-gold:hover { background: #A37F1E; }
+        .btn-dark { background: #334155; color: #FFF; }
+        .btn-dark:hover { background: #475569; }
+        .btn-outline { background: transparent; color: #FFF; border: 1px solid #475569; }
+        .btn-outline:hover { background: #1E293B; }
+
+        /* PREVIEW MODE STYLES */
+        body.preview-mode .field-label {
+            display: none !important; 
+        }
+
+        body.preview-mode .input-editable {
+            border-color: transparent !important;
+            background: transparent !important;
+            padding: 0 !important;
+            pointer-events: none;
+        }
+
+        body.preview-mode .col-action, 
+        body.preview-mode .btn-del-row {
+            display: none !important;
+        }
+
+        body.preview-mode .letterhead-paper {
+            box-shadow: none;
+        }
+
+        /* PDF GENERATION & PRINT STYLES */
+        .pdf-exporting .control-toolbar,
+        @media print {
+            .control-toolbar {
+                display: none !important;
+            }
+            body { padding: 0; background: #FFF; }
+            .field-label { display: none !important; }
+            .input-editable { border: none !important; background: transparent !important; padding: 0 !important; }
+            .letterhead-paper { box-shadow: none !important; width: 100% !important; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+        <!-- Main Letterhead Container -->
+        <div id="quotation-paper" class="letterhead-paper">
+            
+            <div class="letter-content">
+                
+                <!-- TITLE -->
+                <h2 class="document-title">QUOTATION</h2>
+
+                <!-- Client & Formatted Automatic Date Meta -->
+                <div class="meta-grid">
+                    <div>
+                        <div class="field-group">
+                            <label class="field-label">Company Name:</label>
+                            <input type="text" id="client-name" class="input-editable" value="" placeholder="Enter Company Name...">
+                        </div>
+                        <div class="field-group">
+                            <label class="field-label">Company Address:</label>
+                            <input type="text" id="client-address" class="input-editable" value="" placeholder="Enter Company Address...">
+                        </div>
+                    </div>
+                    <div class="date-display">
+                        <span id="formatted-date">Dated: July 24, 2026</span>
+                    </div>
+                </div>
+
+                <!-- Intro -->
+                <div class="intro-text">
+                    <span class="salutation">Dear Sir/Ma'am,</span>
+                    <p>Please find below our best and most competitive quotation for the below-mentioned items on delivered basis.</p>
+                </div>
+
+                <!-- Dynamic Items Table -->
+                <div class="table-container">
+                    <table class="items-table">
+                        <thead>
+                            <tr>
+                                <th>Item Description</th>
+                                <th style="width: 15%;">Qty</th>
+                                <th style="width: 15%;">Unit Price (Rs.)</th>
+                                <th style="width: 15%; text-align: right;">Total Price (Rs.)</th>
+                                <th class="col-action"></th>
+                            </tr>
+                        </thead>
+                        <tbody id="table-body">
+                            <!-- Dynamic Rows -->
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="3" style="text-align: left;">Total</td>
+                                <td id="grand-total" class="col-amount">0</td>
+                                <td class="col-action"></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+
+                <!-- AMOUNT IN WORDS BELOW TABLE -->
+                <div class="words-container">
+                    <span class="words-label">Amount in Words:</span>
+                    <span id="amount-words" class="words-val">Zero Rupees Only</span>
+                </div>
+
+                <!-- CLOSING STATEMENT -->
+                <div class="closing-text-block">
+                    We assure you that our prices reflect the superior quality of our products and we look forward to your favorable response.
+                </div>
+
+                <!-- Signatory Footer -->
+                <div class="signatory-block">
+                    <p style="font-size: 0.85rem;">Warm regards:</p>
+                    <p class="signatory-name">Muhammad Waqar</p>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Floating Action Toolbar -->
+    <div class="control-toolbar">
+        <button type="button" id="btn-add" class="btn btn-dark">
+            <span>+</span> Add Row
+        </button>
+        <button type="button" id="btn-preview" class="btn btn-outline">
+            <span id="preview-text">Preview</span>
+        </button>
+        <button type="button" id="btn-pdf" class="btn btn-gold">
+            Save as PDF
+        </button>
+    </div>
+
+    <!-- JavaScript Logic -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const tableBody = document.getElementById('table-body');
+            const grandTotalEl = document.getElementById('grand-total');
+            const amountWordsEl = document.getElementById('amount-words');
+            const formattedDateEl = document.getElementById('formatted-date');
+
+            // Format Automatic Current Date as "Dated: Month, Day, Year"
+            const today = new Date();
+            const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+            const formattedDate = `Dated: ${monthNames[today.getMonth()]}, ${today.getDate()}, ${today.getFullYear()}`;
+            formattedDateEl.textContent = formattedDate;
+
+            // Auto resize Textarea as user types multiple lines
+            function autoResizeTextarea(el) {
+                el.style.height = 'auto';
+                el.style.height = el.scrollHeight + 'px';
+            }
+
+            // Convert Numbers to Words
+            function numToWords(n) {
+                if (n === 0) return 'Zero Rupees Only';
+                const a = ['','One ','Two ','Three ','Four ','Five ','Six ','Seven ','Eight ','Nine ','Ten ','Eleven ','Twelve ','Thirteen ','Fourteen ','Fifteen ','Sixteen ','Seventeen ','Eighteen ','Nineteen '];
+                const b = ['','','Twenty','Thirty','Forty','Fifty','Sixty','Seventy','Eighty','Ninety'];
+                
+                function inWords(num) {
+                    if ((num = num.toString()).length > 9) return 'Overflow';
+                    let n = ('000000000' + num).substr(-9).match(/^(\d{2})(\d{2})(\d{2})(\d{1})(\d{2})$/);
+                    if (!n) return ''; 
+                    let str = '';
+                    str += (n[1] != 0) ? (a[Number(n[1])] || b[n[1][0]] + ' ' + a[n[1][1]]) + 'Crore ' : '';
+                    str += (n[2] != 0) ? (a[Number(n[2])] || b[n[2][0]] + ' ' + a[n[2][1]]) + 'Lakh ' : '';
+                    str += (n[3] != 0) ? (a[Number(n[3])] || b[n[3][0]] + ' ' + a[n[3][1]]) + 'Thousand ' : '';
+                    str += (n[4] != 0) ? (a[Number(n[4])] || b[n[4][0]] + ' ' + a[n[4][1]]) + 'Hundred ' : '';
+                    str += (n[5] != 0) ? ((str != '') ? 'and ' : '') + (a[Number(n[5])] || b[n[5][0]] + ' ' + a[n[5][1]]) : '';
+                    return str.trim();
+                }
+                return inWords(Math.floor(n)) + ' Rupees Only';
+            }
+
+            // Calculate Amounts
+            function calculate() {
+                let total = 0;
+                const rows = tableBody.querySelectorAll('tr');
+                rows.forEach(row => {
+                    const qty = parseFloat(row.querySelector('.qty').value) || 0;
+                    const rate = parseFloat(row.querySelector('.rate').value) || 0;
+                    const amount = qty * rate;
+                    row.querySelector('.amount').textContent = amount.toLocaleString('en-IN');
+                    total += amount;
+                });
+                grandTotalEl.textContent = total.toLocaleString('en-IN');
+                amountWordsEl.textContent = numToWords(total);
+            }
+
+            // Add Row Function with Auto-wrapping Textarea
+            function addRow(desc = '', qty = 1, rate = 0) {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>
+                        <textarea class="input-editable desc" rows="1" placeholder="Item Description">${desc}</textarea>
+                    </td>
+                    <td><input type="number" class="input-editable qty" value="${qty}" min="0"></td>
+                    <td><input type="number" class="input-editable rate" value="${rate}" min="0"></td>
+                    <td class="col-amount amount">0</td>
+                    <td class="col-action">
+                        <button type="button" class="btn-del-row" title="Delete Row">&times;</button>
+                    </td>
+                `;
+                tableBody.appendChild(tr);
+
+                const descTextarea = tr.querySelector('.desc');
+                autoResizeTextarea(descTextarea);
+
+                descTextarea.addEventListener('input', (e) => {
+                    autoResizeTextarea(e.target);
+                });
+
+                tr.querySelectorAll('input').forEach(inp => inp.addEventListener('input', calculate));
+                tr.querySelector('.btn-del-row').addEventListener('click', () => {
+                    if (tableBody.children.length > 1) {
+                        tr.remove();
+                        calculate();
+                    }
+                });
+                calculate();
+            }
+
+            // Event Listeners
+            document.getElementById('btn-add').addEventListener('click', () => addRow());
+            
+            let isPreview = false;
+            const previewBtnText = document.getElementById('preview-text');
+            document.getElementById('btn-preview').addEventListener('click', function() {
+                isPreview = !isPreview;
+                document.body.classList.toggle('preview-mode', isPreview);
+                previewBtnText.textContent = isPreview ? 'Edit Mode' : 'Preview';
+                
+                // Recalculate textareas height when switching modes
+                document.querySelectorAll('textarea.desc').forEach(autoResizeTextarea);
+            });
+
+            // Save PDF Logic
+            document.getElementById('btn-pdf').addEventListener('click', () => {
+                document.body.classList.add('preview-mode');
+                document.body.classList.add('pdf-exporting');
+                
+                document.querySelectorAll('textarea.desc').forEach(autoResizeTextarea);
+
+                const element = document.getElementById('quotation-paper');
+                const clientName = document.getElementById('client-name').value.trim() || 'Client';
+                const filename = `Quotation_${clientName.replace(/\s+/g, '_')}.pdf`;
+
+                const opt = {
+                    margin:       0,
+                    filename:     filename,
+                    image:        { type: 'jpeg', quality: 0.98 },
+                    html2canvas:  { scale: 2, useCORS: true, logging: false },
+                    jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+                };
+
+                html2pdf().set(opt).from(element).save().then(() => {
+                    document.body.classList.remove('pdf-exporting');
+                    if (!isPreview) {
+                        document.body.classList.remove('preview-mode');
+                    }
+                });
+            });
+
+            // Examples with Multi-line items
+            addRow('Nitrile Gloves\n(Food Grade Material)', 10, 850);
+            addRow('Iron Net (Single Pack)', 5, 1200);
+        });
+    </script>
+</body>
+</html>
