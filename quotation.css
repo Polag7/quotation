@@ -1,0 +1,511 @@
+:root {
+  --primary-blue: #3262ad;
+  --text-dark: #1f2937;
+  --text-muted: #4b5563;
+  --border-light: #e5e7eb;
+  --bg-page: #f3f4f6;
+  --font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--bg-page);
+  color: var(--text-dark);
+  font-family: var(--font-family);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Sticky Toolbar Header */
+.toolbar {
+  background: #1e293b;
+  color: #ffffff;
+  padding: 12px 24px;
+  position: sticky;
+  top: 0;
+  z-index: 9999 !important;
+  display: block !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.toolbar-inner {
+  max-width: 850px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.brand-title {
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.toolbar-actions {
+  display: flex;
+  gap: 12px;
+}
+
+/* Document Container */
+.page-container {
+  max-width: 850px;
+  margin: 24px auto;
+  padding: 0 16px 60px;
+}
+
+.invoice-paper {
+  background-color: #ffffff;
+  width: 100%;
+  min-height: 1100px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.letterhead-header img,
+.letterhead-footer img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.invoice-body {
+  flex: 1;
+  padding: 20px 48px;
+  display: flex;
+  flex-direction: column;
+}
+
+.header-title-container {
+  text-align: right;
+  border-bottom: 2px solid var(--primary-blue);
+  padding-bottom: 4px;
+  margin-bottom: 24px;
+}
+
+.main-invoice-title {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--primary-blue);
+  letter-spacing: 2px;
+}
+
+/* Quotation Meta Info */
+.meta-section {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.meta-left { flex: 1.4; }
+.meta-right { 
+  flex: 0.8; 
+  text-align: right;
+}
+
+.recipient-block {
+  margin-bottom: 24px; /* M/s اور Dear Sir/Ma'am کے درمیان بہترین فاصلہ */
+}
+
+.recipient-prefix {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--primary-blue);
+  display: inline-block;
+  margin-right: 4px;
+}
+
+.bold-recipient {
+  font-weight: 800 !important;
+  font-size: 1.1rem !important;
+  color: #000000 !important;
+  border: 1px solid transparent;
+  background: transparent;
+  padding: 2px 0;
+  width: auto;
+  display: inline-block;
+}
+
+.recipient-address input {
+  width: 100%;
+  border: 1px solid transparent;
+  background: transparent;
+  padding: 2px 0;
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.bold-recipient:hover,
+.bold-recipient:focus,
+.recipient-address input:hover,
+.recipient-address input:focus {
+  border-color: var(--border-light);
+  background: #ffffff;
+  outline: none;
+}
+
+/* Salutation Spacing */
+.salutation-block {
+  margin-top: 14px;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: #1f2937;
+}
+
+.salutation-heading {
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 18px; /* Salutation اور نیچے والی لائن میں خوبصورت فاصلہ */
+}
+
+.intro-message {
+  color: #374151;
+  font-style: normal;
+  line-height: 1.5;
+}
+
+.formatted-date {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--primary-blue);
+  display: inline-block;
+  padding-top: 2px;
+}
+
+/* Table Design & Layout */
+.item-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 12px;
+}
+
+.item-table th {
+  background-color: var(--primary-blue);
+  color: #ffffff;
+  padding: 8px 12px;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  text-align: left;
+}
+
+.item-table td {
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--border-light);
+  vertical-align: top;
+}
+
+.item-table textarea.item-name {
+  width: 100%;
+  border: 1px solid transparent;
+  background: transparent;
+  font-family: inherit;
+  font-size: 0.92rem;
+  color: var(--text-dark);
+  resize: none;
+  overflow: hidden;
+  line-height: 1.4;
+  display: block;
+}
+
+.item-table textarea.item-name:hover,
+.item-table textarea.item-name:focus {
+  border-color: var(--border-light);
+  background-color: #ffffff;
+  outline: none;
+}
+
+/* QTY AND RATE COLUMN ADJUSTMENTS */
+.item-table th.col-qty,
+.item-table td.col-qty {
+  width: 85px;
+  text-align: right;
+}
+
+.item-table th.col-rate,
+.item-table td.col-rate {
+  width: 120px;
+  text-align: right;
+}
+
+.item-table th.col-amount,
+.item-table td.col-amount {
+  width: 120px;
+  text-align: right;
+}
+
+.item-table th.col-action,
+.item-table td.col-action {
+  width: 35px;
+  text-align: center;
+}
+
+.item-table .col-qty input,
+.item-table .col-rate input {
+  width: 100%;
+  text-align: right;
+  padding: 4px 6px;
+  border: 1px solid transparent;
+  background: transparent;
+  font-family: inherit;
+  font-size: 0.95rem;
+  border-radius: 4px;
+}
+
+.item-table .col-qty input:hover,
+.item-table .col-rate input:hover,
+.item-table .col-qty input:focus,
+.item-table .col-rate input:focus {
+  border-color: var(--border-light);
+  background-color: #ffffff;
+  outline: none;
+}
+
+.item-amount {
+  display: block;
+  text-align: right;
+  font-weight: 700;
+  color: var(--primary-blue);
+  padding-top: 4px;
+}
+
+.btn-delete {
+  background: none;
+  border: none;
+  color: #ef4444;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding-top: 2px;
+}
+
+.add-row-wrapper { margin-bottom: 24px; }
+
+.btn-outline-sm {
+  background: transparent;
+  border: 1px solid var(--primary-blue);
+  color: var(--primary-blue);
+  padding: 5px 12px;
+  border-radius: 4px;
+  font-weight: 700;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.btn-outline-sm:hover {
+  background: var(--primary-blue);
+  color: #ffffff;
+}
+
+/* Bottom Grid Section */
+.invoice-bottom-grid {
+  display: flex;
+  justify-content: space-between;
+  gap: 40px;
+  margin-top: auto;
+  padding-top: 10px;
+}
+
+.bottom-left-col { flex: 1.2; }
+
+.closing-assurance {
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--text-dark);
+  margin-bottom: 12px;
+}
+
+.delivery-badge-wrapper {
+  margin-bottom: 20px;
+}
+
+.delivery-tag {
+  display: inline-block;
+  background-color: #fef3c7;
+  color: #92400e;
+  font-weight: 700;
+  font-size: 0.85rem;
+  padding: 4px 10px;
+  border-radius: 4px;
+  border: 1px solid #fde68a;
+}
+
+.terms-title {
+  font-size: 0.88rem;
+  font-weight: 800;
+  color: #000000;
+  margin-bottom: 4px;
+}
+
+.terms-body {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.bottom-right-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.grand-total-badge {
+  background-color: var(--primary-blue);
+  color: #ffffff;
+  width: 100%;
+  padding: 8px 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.badge-label {
+  font-weight: 800;
+  font-size: 0.95rem;
+  letter-spacing: 0.5px;
+}
+
+.badge-val {
+  font-weight: 800;
+  font-size: 1.15rem;
+}
+
+.amount-in-words-box {
+  width: 100%;
+  text-align: right;
+  margin-bottom: 30px;
+  padding: 0 4px;
+}
+
+.words-label {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.words-value {
+  display: block;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--text-dark);
+  font-style: italic;
+}
+
+.signature-block {
+  text-align: right;
+  margin-top: auto;
+}
+
+.signer-salutation {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin-bottom: 2px;
+}
+
+.script-signature {
+  font-family: 'Caveat', cursive;
+  font-size: 2rem;
+  color: #1f2937;
+  line-height: 1;
+  margin-bottom: 2px;
+}
+
+.signer-name {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #000000;
+}
+
+.signer-title {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.btn {
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s ease;
+}
+
+.btn-primary {
+  background-color: var(--primary-blue);
+  color: #ffffff;
+}
+
+.btn-secondary {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+}
+
+.btn-active-mode {
+  background-color: #f59e0b !important;
+  color: #ffffff !important;
+  font-weight: 800 !important;
+}
+
+/* Preview Mode Styles */
+body.preview-active .add-row-wrapper,
+body.preview-active .col-action,
+body.preview-active .btn-delete {
+  display: none !important;
+}
+
+body.preview-active input,
+body.preview-active textarea {
+  border-color: transparent !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
+  pointer-events: none !important;
+  user-select: text;
+}
+
+/* Print Rules */
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 0;
+  }
+
+  .toolbar,
+  .add-row-wrapper,
+  .col-action,
+  .btn-delete {
+    display: none !important;
+  }
+
+  body {
+    background: #ffffff;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .page-container {
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  .invoice-paper {
+    box-shadow: none;
+    width: 100vw;
+    height: 100vh;
+  }
+
+  input, textarea {
+    border: none !important;
+    background: transparent !important;
+  }
+}

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nexus Global Traders - Price Quotation</title>
+  <link rel="stylesheet" href="quotation.css">
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Sticky Top Control Bar -->
+  <header class="toolbar">
+    <div class="toolbar-inner">
+      <div class="brand-info">
+        <span class="brand-title">Nexus Global Traders</span>
+      </div>
+      <div class="toolbar-actions">
+        <button type="button" id="toggleModeBtn" class="btn btn-secondary">Preview Mode</button>
+        <button type="button" onclick="window.print()" class="btn btn-primary">Print / Save as PDF</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Document Paper Container -->
+  <div class="page-container">
+    <article class="invoice-paper" id="quotationPaper">
+
+      <!-- Header Image -->
+      <div class="letterhead-header">
+        <img src="header1.jpg" alt="Header Image">
+      </div>
+
+      <!-- Main Body -->
+      <div class="invoice-body">
+
+        <div class="header-title-container">
+          <h1 class="main-invoice-title"> QUOTATION</h1>
+        </div>
+
+        <div class="meta-section">
+          <div class="meta-left">
+            <div class="recipient-block">
+              <span class="recipient-prefix">M/s:</span>
+              <input type="text" id="companyName" value="TAZIJ FOODS & MEAT." class="bold-recipient">
+              <div class="recipient-address">
+                <input type="text" id="companyAddress" value="Raiwind, Lahore">
+              </div>
+            </div>
+
+            <!-- Proper spacing introduced here -->
+            <div class="salutation-block">
+              <p class="salutation-heading">Dear Sir/Ma'am,</p>
+              <p class="intro-message">Please find below our best and most competitive quotation for the below-mentioned items.</p>
+            </div>
+          </div>
+
+          <div class="meta-right">
+            <div class="meta-field date-field-inline">
+              <span class="formatted-date" id="quotationDateDisplay">Dated: July, 26, 2026</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Dynamic Items Table -->
+        <table class="item-table" id="itemTable">
+          <thead>
+            <tr>
+              <th class="col-item">Item Description</th>
+              <th class="col-qty">Qty</th>
+              <th class="col-rate">Rate (Rs.)</th>
+              <th class="col-amount">Amount (Rs.)</th>
+              <th class="col-action">&nbsp;</th>
+            </tr>
+          </thead>
+          <tbody id="itemTableBody">
+            <!-- Dynamic Rows -->
+          </tbody>
+        </table>
+
+        <!-- Table Controls -->
+        <div class="add-row-wrapper">
+          <button type="button" id="addRowBtn" class="btn-outline-sm">+ Add Quotation Item</button>
+        </div>
+
+        <!-- Quotation Bottom Section -->
+        <div class="invoice-bottom-grid">
+          <div class="bottom-left-col">
+            <p class="closing-assurance">
+              We assure you that our prices reflect the superior quality of our products and we look forward to your favorable response.
+            </p>
+
+            <div class="delivery-badge-wrapper">
+              <span class="delivery-tag">* Rates are offered on delivered basis.</span>
+            </div>
+
+            <div class="terms-block">
+              <h4 class="terms-title">Terms & Conditions :</h4>
+              <p class="terms-body">
+                1. Quotation validity is 15 days from the date of issue.<br>
+                2. Delivery will be executed as per mutually agreed timelines.
+              </p>
+            </div>
+          </div>
+
+          <div class="bottom-right-col">
+            <div class="grand-total-badge">
+              <span class="badge-label">TOTAL AMOUNT :</span>
+              <span class="badge-val" id="grandTotal">Rs. 0</span>
+            </div>
+
+            <div class="amount-in-words-box">
+              <span class="words-label">Amount in Words:</span>
+              <span class="words-value" id="amountInWords">Zero Rupees Only</span>
+            </div>
+
+            <div class="signature-block">
+              <div class="signer-salutation">Warm regards:</div>
+              <div class="script-signature">Muhammad Waqar</div>
+              <div class="signer-name">Muhammad Waqar</div>
+              <div class="signer-title">Nexus Global Traders</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Footer Image -->
+      <div class="letterhead-footer">
+        <img src="footer2.jpg" alt="Footer Image">
+      </div>
+
+    </article>
+  </div>
+
+  <!-- Dynamic Item Row Template -->
+  <template id="rowTemplate">
+    <tr class="item-row">
+      <td class="col-item">
+        <textarea class="item-name" rows="1" placeholder="Item Description"></textarea>
+      </td>
+      <td class="col-qty">
+        <input type="number" class="item-qty" min="1" value="1">
+      </td>
+      <td class="col-rate">
+        <input type="number" class="item-rate" min="0" placeholder="0">
+      </td>
+      <td class="col-amount">
+        <span class="item-amount">Rs. 0</span>
+      </td>
+      <td class="col-action">
+        <button type="button" class="btn-delete" title="Remove">&times;</button>
+      </td>
+    </tr>
+  </template>
+
+  <script src="quotation.js"></script>
+</body>
+</html>
