@@ -4,12 +4,468 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Nexus Global Traders - Price Quotation</title>
-  <link rel="stylesheet" href="quotation.css">
   <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --primary-blue: #3262ad;
+      --text-dark: #1f2937;
+      --text-muted: #4b5563;
+      --border-light: #e5e7eb;
+      --bg-page: #f3f4f6;
+      --font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-page);
+      color: var(--text-dark);
+      font-family: var(--font-family);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Top Sticky Control Toolbar */
+    .toolbar {
+      background: #1e293b;
+      color: #ffffff;
+      padding: 10px 20px;
+      position: sticky;
+      top: 0;
+      z-index: 9999;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .toolbar-inner {
+      max-width: 850px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand-title {
+      font-weight: 700;
+      font-size: 1.05rem;
+    }
+
+    .toolbar-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    /* Page Container */
+    .page-container {
+      max-width: 850px;
+      margin: 15px auto;
+      padding: 0 12px 30px;
+    }
+
+    .invoice-paper {
+      background-color: #ffffff;
+      width: 100%;
+      min-height: 1050px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .letterhead-header img,
+    .letterhead-footer img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .invoice-body {
+      flex: 1;
+      padding: 5px 40px 15px 40px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Title */
+    .header-title-container {
+      text-align: right;
+      border-bottom: 2px solid var(--primary-blue);
+      padding-bottom: 2px;
+      margin-top: -12px;
+      margin-bottom: 12px;
+    }
+
+    .main-invoice-title {
+      font-size: 1.75rem;
+      font-weight: 800;
+      color: var(--primary-blue);
+      letter-spacing: 1.5px;
+    }
+
+    /* Quotation Meta Info */
+    .meta-section {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .meta-left { flex: 1.4; }
+    .meta-right { 
+      flex: 0.8; 
+      text-align: right;
+    }
+
+    .recipient-block {
+      margin-bottom: 10px;
+    }
+
+    .recipient-prefix {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--primary-blue);
+      display: inline-block;
+      margin-right: 4px;
+    }
+
+    .bold-recipient {
+      font-weight: 800 !important;
+      font-size: 1.05rem !important;
+      color: #000000 !important;
+      border: 1px solid transparent;
+      background: transparent;
+      padding: 1px 0;
+      width: auto;
+      display: inline-block;
+    }
+
+    .recipient-address input {
+      width: 100%;
+      border: 1px solid transparent;
+      background: transparent;
+      padding: 1px 0;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      font-weight: 600;
+      text-decoration: underline; /* Address Underlined */
+    }
+
+    .bold-recipient:hover,
+    .bold-recipient:focus,
+    .recipient-address input:hover,
+    .recipient-address input:focus {
+      border-color: var(--border-light);
+      background: #ffffff;
+      outline: none;
+    }
+
+    /* Salutation Block & Increased Spacing */
+    .salutation-block {
+      margin-top: 24px; /* 1-line gap between Address and Dear Sir/Ma'am */
+      font-size: 0.9rem;
+      line-height: 1.35;
+      color: #1f2937;
+    }
+
+    .salutation-heading {
+      font-weight: 700;
+      color: #111827;
+      margin-bottom: 10px;
+    }
+
+    /* Larger Intro Message fitting into ~2 Lines */
+    .intro-message {
+      color: #374151;
+      font-style: normal;
+      font-size: 1.0rem; /* Font enlarged */
+      font-weight: 500;
+      line-height: 1.05;  /* Balanced spacing for 2 lines */
+    }
+
+    .formatted-date {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--primary-blue);
+      display: inline-block;
+      padding-top: 2px;
+    }
+
+    /* Highly Compact Table Layout */
+    .item-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 12px;
+    }
+
+    .item-table th {
+      background-color: var(--primary-blue);
+      color: #ffffff;
+      padding: 6px 8px;
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      text-align: left;
+    }
+
+    .item-table td {
+      padding: 4px 8px;
+      border-bottom: 1px solid var(--border-light);
+      vertical-align: middle;
+    }
+
+    .item-table textarea.item-name {
+      width: 100%;
+      border: 1px solid transparent;
+      background: transparent;
+      font-family: inherit;
+      font-size: 0.85rem;
+      color: var(--text-dark);
+      resize: none;
+      overflow: hidden;
+      line-height: 1.25;
+      display: block;
+    }
+
+    .item-table textarea.item-name:hover,
+    .item-table textarea.item-name:focus {
+      border-color: var(--border-light);
+      background-color: #ffffff;
+      outline: none;
+    }
+
+    .item-table th.col-qty,
+    .item-table td.col-qty {
+      width: 70px;
+      text-align: right;
+    }
+
+    .item-table th.col-rate,
+    .item-table td.col-rate {
+      width: 100px;
+      text-align: right;
+    }
+
+    .item-table th.col-amount,
+    .item-table td.col-amount {
+      width: 120px;
+      text-align: right;
+    }
+
+    .item-table th.col-action,
+    .item-table td.col-action {
+      width: 28px;
+      text-align: center;
+    }
+
+    .item-table .col-qty input,
+    .item-table .col-rate input {
+      width: 100%;
+      text-align: right;
+      padding: 1px 3px;
+      border: 1px solid transparent;
+      background: transparent;
+      font-family: inherit;
+      font-size: 0.85rem;
+      border-radius: 3px;
+    }
+
+    .item-table .col-qty input:hover,
+    .item-table .col-rate input:hover,
+    .item-table .col-qty input:focus,
+    .item-table .col-rate input:focus {
+      border-color: var(--border-light);
+      background-color: #ffffff;
+      outline: none;
+    }
+
+    .item-amount {
+      display: block;
+      text-align: right;
+      font-weight: 700;
+      color: var(--primary-blue);
+      font-size: 0.85rem;
+    }
+
+    /* Table Total & Words Rows */
+    .table-total-row td {
+      background-color: #f8fafc;
+      font-weight: 800;
+      font-size: 0.9rem;
+      color: var(--text-dark);
+      border-top: 2px solid var(--primary-blue);
+      border-bottom: 1px solid var(--border-light);
+      padding: 6px 8px;
+    }
+
+    .table-words-row td {
+      background-color: #f8fafc;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      border-bottom: 2px solid var(--border-light);
+      padding: 6px 8px;
+    }
+
+    .words-value-text {
+      font-style: italic;
+      font-weight: 700;
+      color: var(--text-dark);
+    }
+
+    .btn-delete {
+      background: none;
+      border: none;
+      color: #ef4444;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    .add-row-wrapper { margin-bottom: 16px; }
+
+    .btn-outline-sm {
+      background: transparent;
+      border: 1px solid var(--primary-blue);
+      color: var(--primary-blue);
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-weight: 700;
+      font-size: 0.75rem;
+      cursor: pointer;
+    }
+
+    .btn-outline-sm:hover {
+      background: var(--primary-blue);
+      color: #ffffff;
+    }
+
+    /* Closing Assurance Paragraph */
+    .closing-assurance {
+      font-size: 1.05rem;
+      line-height: 1.0;
+      color: var(--text-dark);
+      margin-bottom: 12px;
+    }
+
+    /* Bottom Signature Section */
+    .invoice-bottom-section {
+      margin-top: auto;
+      display: flex;
+      justify-content: flex-end;
+      padding-top: 10px;
+    }
+
+    .signature-block {
+      text-align: right;
+    }
+
+    .signer-salutation {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--text-dark);
+    }
+
+    .script-signature {
+      font-family: 'Caveat', cursive;
+      font-size: 1.6rem;
+      color: #1f2937;
+      line-height: 0.9;
+    }
+
+    .signer-name {
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: #000000;
+    }
+
+    .signer-title {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .btn {
+      padding: 6px 14px;
+      border-radius: 5px;
+      font-weight: 700;
+      font-size: 0.8rem;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s ease;
+    }
+
+    .btn-primary {
+      background-color: var(--primary-blue);
+      color: #ffffff;
+    }
+
+    .btn-secondary {
+      background-color: rgba(255, 255, 255, 0.2);
+      color: #ffffff;
+    }
+
+    .btn-active-mode {
+      background-color: #f59e0b !important;
+      color: #ffffff !important;
+      font-weight: 800 !important;
+    }
+
+    /* Preview Mode */
+    body.preview-active .add-row-wrapper,
+    body.preview-active .col-action,
+    body.preview-active .btn-delete {
+      display: none !important;
+    }
+
+    body.preview-active input,
+    body.preview-active textarea {
+      border-color: transparent !important;
+      background-color: transparent !important;
+      box-shadow: none !important;
+      pointer-events: none !important;
+      user-select: text;
+    }
+
+    /* Print Rules */
+    @media print {
+      @page {
+        size: A4 portrait;
+        margin: 0;
+      }
+
+      .toolbar,
+      .add-row-wrapper,
+      .col-action,
+      .btn-delete {
+        display: none !important;
+      }
+
+      body {
+        background: #ffffff;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+
+      .page-container {
+        max-width: 100%;
+        margin: 0;
+        padding: 0;
+      }
+
+      .invoice-paper {
+        box-shadow: none;
+        width: 100vw;
+        height: 100vh;
+      }
+
+      input, textarea {
+        border: none !important;
+        background: transparent !important;
+      }
+    }
+  </style>
 </head>
 <body>
 
-  <!-- Sticky Top Control Bar -->
+  <!-- Top Toolbar -->
   <header class="toolbar">
     <div class="toolbar-inner">
       <div class="brand-info">
@@ -22,20 +478,20 @@
     </div>
   </header>
 
-  <!-- Document Paper Container -->
+  <!-- Document Container -->
   <div class="page-container">
     <article class="invoice-paper" id="quotationPaper">
 
       <!-- Header Image -->
       <div class="letterhead-header">
-        <img src="header1.jpg" alt="Header Image">
+        <img src="header1.jpg" alt="Header Image" onerror="this.style.display='none'">
       </div>
 
       <!-- Main Body -->
       <div class="invoice-body">
 
         <div class="header-title-container">
-          <h1 class="main-invoice-title"> QUOTATION</h1>
+          <h1 class="main-invoice-title">QUOTATION</h1>
         </div>
 
         <div class="meta-section">
@@ -48,7 +504,6 @@
               </div>
             </div>
 
-            <!-- Proper spacing introduced here -->
             <div class="salutation-block">
               <p class="salutation-heading">Dear Sir/Ma'am,</p>
               <p class="intro-message">Please find below our best and most competitive quotation for the below-mentioned items.</p>
@@ -74,52 +529,40 @@
             </tr>
           </thead>
           <tbody id="itemTableBody">
-            <!-- Dynamic Rows -->
+            <!-- Dynamic Rows Generated by JS -->
           </tbody>
+          <tfoot>
+            <tr class="table-total-row">
+              <td colspan="3" style="text-align: right;">TOTAL AMOUNT :</td>
+              <td id="grandTotal" style="text-align: right; color: var(--primary-blue);">Rs. 0</td>
+              <td></td>
+            </tr>
+            <tr class="table-words-row">
+              <td colspan="4">
+                Amount in Words: <span id="amountInWords" class="words-value-text">Zero Rupees Only</span>
+              </td>
+              <td></td>
+            </tr>
+          </tfoot>
         </table>
 
-        <!-- Table Controls -->
+        <!-- Table Control -->
         <div class="add-row-wrapper">
           <button type="button" id="addRowBtn" class="btn-outline-sm">+ Add Quotation Item</button>
         </div>
 
-        <!-- Quotation Bottom Section -->
-        <div class="invoice-bottom-grid">
-          <div class="bottom-left-col">
-            <p class="closing-assurance">
-              We assure you that our prices reflect the superior quality of our products and we look forward to your favorable response.
-            </p>
+        <!-- Closing Assurance Paragraph -->
+        <p class="closing-assurance">
+          We assure you that our prices reflect the superior quality of our products and we look forward to your favorable response.
+        </p>
 
-            <div class="delivery-badge-wrapper">
-              <span class="delivery-tag">* Rates are offered on delivered basis.</span>
-            </div>
-
-            <div class="terms-block">
-              <h4 class="terms-title">Terms & Conditions :</h4>
-              <p class="terms-body">
-                1. Quotation validity is 15 days from the date of issue.<br>
-                2. Delivery will be executed as per mutually agreed timelines.
-              </p>
-            </div>
-          </div>
-
-          <div class="bottom-right-col">
-            <div class="grand-total-badge">
-              <span class="badge-label">TOTAL AMOUNT :</span>
-              <span class="badge-val" id="grandTotal">Rs. 0</span>
-            </div>
-
-            <div class="amount-in-words-box">
-              <span class="words-label">Amount in Words:</span>
-              <span class="words-value" id="amountInWords">Zero Rupees Only</span>
-            </div>
-
-            <div class="signature-block">
-              <div class="signer-salutation">Warm regards:</div>
-              <div class="script-signature">Muhammad Waqar</div>
-              <div class="signer-name">Muhammad Waqar</div>
-              <div class="signer-title">Nexus Global Traders</div>
-            </div>
+        <!-- Bottom Signature Section -->
+        <div class="invoice-bottom-section">
+          <div class="signature-block">
+            <div class="signer-salutation">Warm regards:</div>
+            <div class="script-signature">Muhammad Waqar</div>
+            <div class="signer-name">Muhammad Waqar</div>
+            <div class="signer-title">Nexus Global Traders</div>
           </div>
         </div>
 
@@ -127,7 +570,7 @@
 
       <!-- Footer Image -->
       <div class="letterhead-footer">
-        <img src="footer2.jpg" alt="Footer Image">
+        <img src="footer2.jpg" alt="Footer Image" onerror="this.style.display='none'">
       </div>
 
     </article>
@@ -154,6 +597,134 @@
     </tr>
   </template>
 
-  <script src="quotation.js"></script>
+  <!-- Embedded Script -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const itemTableBody = document.getElementById('itemTableBody');
+      const addRowBtn = document.getElementById('addRowBtn');
+      const rowTemplate = document.getElementById('rowTemplate');
+      const grandTotal = document.getElementById('grandTotal');
+      const amountInWords = document.getElementById('amountInWords');
+      const quotationDateDisplay = document.getElementById('quotationDateDisplay');
+      const toggleModeBtn = document.getElementById('toggleModeBtn');
+
+      // Date Setting
+      const now = new Date();
+      const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+      const formattedDateString = `Dated: ${monthNames[now.getMonth()]}, ${now.getDate()}, ${now.getFullYear()}`;
+      
+      if (quotationDateDisplay) {
+        quotationDateDisplay.textContent = formattedDateString;
+      }
+
+      // Initial Default Data
+      const defaultItems = [
+        { desc: 'Fresh Boneless Beef (A-Grade Quality Export Standard)', qty: 50, rate: 1250 },
+        { desc: 'Frozen Mutton Leg Cuts (Premium Hygienic Packaging)', qty: 30, rate: 2100 }
+      ];
+
+      defaultItems.forEach(item => createRow(item.desc, item.qty, item.rate));
+
+      if (addRowBtn) {
+        addRowBtn.addEventListener('click', () => {
+          createRow();
+          recalculate();
+        });
+      }
+
+      if (toggleModeBtn) {
+        toggleModeBtn.addEventListener('click', () => {
+          const isPreview = document.body.classList.toggle('preview-active');
+          
+          if (isPreview) {
+            toggleModeBtn.textContent = 'Edit Mode';
+            toggleModeBtn.classList.remove('btn-secondary');
+            toggleModeBtn.classList.add('btn-active-mode');
+          } else {
+            toggleModeBtn.textContent = 'Preview Mode';
+            toggleModeBtn.classList.remove('btn-active-mode');
+            toggleModeBtn.classList.add('btn-secondary');
+          }
+        });
+      }
+
+      function autoResizeTextarea(textarea) {
+        textarea.style.height = 'auto';
+        textarea.style.height = textarea.scrollHeight + 'px';
+      }
+
+      function createRow(desc = '', qty = 1, rate = 0) {
+        if (!rowTemplate || !itemTableBody) return;
+
+        const clone = rowTemplate.content.cloneNode(true);
+        const row = clone.querySelector('tr');
+
+        const nameInput = row.querySelector('.item-name');
+        const qtyInput = row.querySelector('.item-qty');
+        const rateInput = row.querySelector('.item-rate');
+        const deleteBtn = row.querySelector('.btn-delete');
+
+        if (nameInput) {
+          nameInput.value = desc;
+          nameInput.addEventListener('input', () => autoResizeTextarea(nameInput));
+        }
+        if (qtyInput) qtyInput.value = qty;
+        if (rateInput) rateInput.value = rate || '';
+
+        if (qtyInput) qtyInput.addEventListener('input', recalculate);
+        if (rateInput) rateInput.addEventListener('input', recalculate);
+
+        if (deleteBtn) {
+          deleteBtn.addEventListener('click', () => {
+            row.remove();
+            recalculate();
+          });
+        }
+
+        itemTableBody.appendChild(row);
+        if (nameInput) autoResizeTextarea(nameInput);
+        recalculate();
+      }
+
+      function recalculate() {
+        let total = 0;
+        const rows = itemTableBody.querySelectorAll('.item-row');
+
+        rows.forEach(row => {
+          const qty = parseFloat(row.querySelector('.item-qty').value) || 0;
+          const rate = parseFloat(row.querySelector('.item-rate').value) || 0;
+          const amount = qty * rate;
+
+          const amountSpan = row.querySelector('.item-amount');
+          if (amountSpan) amountSpan.textContent = `Rs. ${amount.toLocaleString()}`;
+          total += amount;
+        });
+
+        if (grandTotal) grandTotal.textContent = `Rs. ${total.toLocaleString()}`;
+        if (amountInWords) amountInWords.textContent = numberToEnglishWords(total) + ' Rupees Only';
+      }
+
+      function numberToEnglishWords(num) {
+        if (num === 0) return 'Zero';
+
+        const a = [
+          '', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten',
+          'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen'
+        ];
+        const b = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
+
+        function inWords(n) {
+          if (n < 20) return a[n];
+          if (n < 100) return b[Math.floor(n / 10)] + (n % 10 !== 0 ? ' ' + a[n % 10] : '');
+          if (n < 1000) return a[Math.floor(n / 100)] + ' Hundred' + (n % 100 !== 0 ? ' ' + inWords(n % 100) : '');
+          if (n < 100000) return inWords(Math.floor(n / 1000)) + ' Thousand' + (n % 1000 !== 0 ? ' ' + inWords(n % 1000) : '');
+          if (n < 10000000) return inWords(Math.floor(n / 100000)) + ' Lakh' + (n % 100000 !== 0 ? ' ' + inWords(n % 100000) : '');
+          return inWords(Math.floor(n / 10000000)) + ' Crore' + (n % 10000000 !== 0 ? ' ' + inWords(n % 10000000) : '');
+        }
+
+        return inWords(Math.floor(num));
+      }
+    });
+  </script>
 </body>
 </html>
