@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Nexus Global Traders - Quotation</title>
+  <title>Nexus Global Traders - Price Quotation</title>
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -100,13 +100,14 @@
       flex-direction: column;
     }
 
-    /* Header Title Block */
+    /* Full-width Title Container with Blue Line */
     .header-title-container {
+      width: 100%;
       text-align: right;
-      border-bottom: 2px solid var(--primary-blue);
+      border-bottom: 3px solid var(--primary-blue);
       padding-bottom: 4px;
       margin-top: -6px;
-      margin-bottom: 12px;
+      margin-bottom: 8px;
     }
 
     .main-invoice-title {
@@ -117,22 +118,24 @@
       text-transform: uppercase;
     }
 
-    /* Quotation Meta Info */
-    .meta-section {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 10px;
+    /* Date Section strictly UNDER the line */
+    .date-bar-right {
+      text-align: right;
+      width: 100%;
+      margin-bottom: 12px;
+      padding-right: 2px;
     }
 
-    .meta-left { flex: 1.6; }
-    .meta-right { 
-      flex: 0.8; 
-      text-align: right;
+    .formatted-date {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--primary-blue);
+      display: inline-block;
     }
 
     /* Recipient Block with 2-line gap after address */
     .recipient-block {
-      margin-bottom: 24px; /* 2 Lines Gap (approx. 24px) */
+      margin-bottom: 24px;
     }
 
     .recipient-prefix {
@@ -195,14 +198,6 @@
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-    }
-
-    .formatted-date {
-      font-size: 0.88rem;
-      font-weight: 700;
-      color: var(--primary-blue);
-      white-space: nowrap;
-      display: inline-block;
     }
 
     /* Table Layout */
@@ -518,11 +513,17 @@
       <!-- Main Invoice Body -->
       <div class="invoice-body">
 
+        <!-- Full Width Title Block with Blue Bottom Line -->
         <div class="header-title-container">
-          <h1 class="main-invoice-title">QUOTATION</h1>
+          <h1 class="main-invoice-title">PRICE QUOTATION</h1>
         </div>
 
-        <!-- Meta Receiver Info & Date -->
+        <!-- Date Placement: Strictly Below Blue Line -->
+        <div class="date-bar-right">
+          <span class="formatted-date" id="quotationDateDisplay">Dated: July 29, 2026</span>
+        </div>
+
+        <!-- Meta Receiver Info -->
         <div class="meta-section">
           <div class="meta-left">
             <div class="recipient-block">
@@ -536,12 +537,6 @@
             <div class="salutation-block">
               <p class="salutation-heading">Dear Sir/Ma'am,</p>
               <p class="intro-message">Please find below our best and most competitive quotation for the below-mentioned items.</p>
-            </div>
-          </div>
-
-          <div class="meta-right">
-            <div class="meta-field date-field-inline">
-              <span class="formatted-date" id="quotationDateDisplay">Dated: July 26, 2026</span>
             </div>
           </div>
         </div>
@@ -623,7 +618,7 @@
     </tr>
   </template>
 
-  <!-- Embedded Calculation & Dynamic Resizing Logic -->
+  <!-- Embedded Calculation Logic -->
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       const itemTableBody = document.getElementById('itemTableBody');
@@ -634,7 +629,7 @@
       const quotationDateDisplay = document.getElementById('quotationDateDisplay');
       const toggleModeBtn = document.getElementById('toggleModeBtn');
 
-      // Set Current Date Dynamically without line breaks
+      // Dynamic Date
       const now = new Date();
       const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
       const formattedDateString = `Dated: ${monthNames[now.getMonth()]} ${now.getDate()}, ${now.getFullYear()}`;
@@ -643,7 +638,7 @@
         quotationDateDisplay.textContent = formattedDateString;
       }
 
-      // Initial Default Items
+      // Default Rows
       const defaultItems = [
         { desc: 'Fresh Boneless Beef (A-Grade Quality Export Standard)', qty: 50, rate: 1250 },
         { desc: 'Frozen Mutton Leg Cuts (Premium Hygienic Packaging)', qty: 30, rate: 2100 },
