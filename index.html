@@ -3,17 +3,21 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Nexus Global Traders - Price Quotation</title>
-  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&display=swap" rel="stylesheet">
+  <title>Nexus Global Traders - Quotation</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   
   <style>
     :root {
       --primary-blue: #3262ad;
+      --primary-dark: #224378;
       --text-dark: #1f2937;
       --text-muted: #4b5563;
       --border-light: #e5e7eb;
       --bg-page: #f3f4f6;
-      --font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+      --font-family: 'Inter', 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
     }
 
     * {
@@ -41,7 +45,7 @@
     }
 
     .toolbar-inner {
-      max-width: 850px;
+      max-width: 900px;
       margin: 0 auto;
       display: flex;
       justify-content: space-between;
@@ -51,28 +55,35 @@
     .brand-title {
       font-weight: 700;
       font-size: 1.05rem;
+      letter-spacing: 0.5px;
     }
 
     .toolbar-actions {
       display: flex;
       gap: 10px;
+      align-items: center;
     }
 
     /* Page Container */
     .page-container {
       max-width: 850px;
-      margin: 15px auto;
+      margin: 20px auto;
       padding: 0 12px 30px;
     }
 
+    /* Fixed A4 Structure Layout */
     .invoice-paper {
       background-color: #ffffff;
       width: 100%;
-      min-height: 1050px;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+      height: 297mm;
+      max-height: 297mm;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+      overflow: hidden;
+      position: relative;
+      border-radius: 4px;
     }
 
     .letterhead-header img,
@@ -84,47 +95,49 @@
 
     .invoice-body {
       flex: 1;
-      padding: 5px 40px 15px 40px;
+      padding: 10px 45px 15px 45px;
       display: flex;
       flex-direction: column;
     }
 
-    /* Title */
+    /* Header Title Block */
     .header-title-container {
       text-align: right;
       border-bottom: 2px solid var(--primary-blue);
-      padding-bottom: 2px;
-      margin-top: -12px;
+      padding-bottom: 4px;
+      margin-top: -6px;
       margin-bottom: 12px;
     }
 
     .main-invoice-title {
-      font-size: 1.75rem;
+      font-size: 1.65rem;
       font-weight: 800;
       color: var(--primary-blue);
       letter-spacing: 1.5px;
+      text-transform: uppercase;
     }
 
     /* Quotation Meta Info */
     .meta-section {
       display: flex;
       justify-content: space-between;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
     }
 
-    .meta-left { flex: 1.4; }
+    .meta-left { flex: 1.6; }
     .meta-right { 
       flex: 0.8; 
       text-align: right;
     }
 
+    /* Recipient Block with 2-line gap after address */
     .recipient-block {
-      margin-bottom: 10px;
+      margin-bottom: 24px; /* 2 Lines Gap (approx. 24px) */
     }
 
     .recipient-prefix {
-      font-size: 0.9rem;
-      font-weight: 700;
+      font-size: 0.95rem;
+      font-weight: 800;
       color: var(--primary-blue);
       display: inline-block;
       margin-right: 4px;
@@ -136,7 +149,7 @@
       color: #000000 !important;
       border: 1px solid transparent;
       background: transparent;
-      padding: 1px 0;
+      padding: 0;
       width: auto;
       display: inline-block;
     }
@@ -145,11 +158,11 @@
       width: 100%;
       border: 1px solid transparent;
       background: transparent;
-      padding: 1px 0;
+      padding: 2px 0;
       font-size: 0.9rem;
       color: var(--text-muted);
       font-weight: 600;
-      text-decoration: underline; /* Address Underlined */
+      text-decoration: underline;
     }
 
     .bold-recipient:hover,
@@ -161,9 +174,9 @@
       outline: none;
     }
 
-    /* Salutation Block & Increased Spacing */
+    /* Salutation Block */
     .salutation-block {
-      margin-top: 24px; /* 1-line gap between Address and Dear Sir/Ma'am */
+      margin-top: 8px;
       font-size: 0.9rem;
       line-height: 1.35;
       color: #1f2937;
@@ -172,31 +185,35 @@
     .salutation-heading {
       font-weight: 700;
       color: #111827;
-      margin-bottom: 10px;
+      margin-bottom: 1.2rem; 
     }
 
-    /* Larger Intro Message fitting into ~2 Lines */
     .intro-message {
       color: #374151;
-      font-style: normal;
-      font-size: 1.0rem; /* Font enlarged */
+      font-size: 0.88rem;
       font-weight: 500;
-      line-height: 1.05;  /* Balanced spacing for 2 lines */
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .formatted-date {
-      font-size: 0.9rem;
+      font-size: 0.88rem;
       font-weight: 700;
       color: var(--primary-blue);
+      white-space: nowrap;
       display: inline-block;
-      padding-top: 2px;
     }
 
-    /* Highly Compact Table Layout */
+    /* Table Layout */
+    .item-table-wrapper {
+      margin-bottom: 12px;
+      margin-top: 6px;
+    }
+
     .item-table {
       width: 100%;
       border-collapse: collapse;
-      margin-bottom: 12px;
     }
 
     .item-table th {
@@ -206,10 +223,11 @@
       font-size: 0.78rem;
       text-transform: uppercase;
       text-align: left;
+      letter-spacing: 0.5px;
     }
 
     .item-table td {
-      padding: 4px 8px;
+      padding: 6px 8px;
       border-bottom: 1px solid var(--border-light);
       vertical-align: middle;
     }
@@ -222,9 +240,10 @@
       font-size: 0.85rem;
       color: var(--text-dark);
       resize: none;
-      overflow: hidden;
-      line-height: 1.25;
+      line-height: 1.4;
       display: block;
+      padding: 2px 0 4px 0;
+      box-sizing: border-box;
     }
 
     .item-table textarea.item-name:hover,
@@ -236,7 +255,7 @@
 
     .item-table th.col-qty,
     .item-table td.col-qty {
-      width: 70px;
+      width: 65px;
       text-align: right;
     }
 
@@ -248,13 +267,13 @@
 
     .item-table th.col-amount,
     .item-table td.col-amount {
-      width: 120px;
+      width: 115px;
       text-align: right;
     }
 
     .item-table th.col-action,
     .item-table td.col-action {
-      width: 28px;
+      width: 25px;
       text-align: center;
     }
 
@@ -262,7 +281,7 @@
     .item-table .col-rate input {
       width: 100%;
       text-align: right;
-      padding: 1px 3px;
+      padding: 3px 4px;
       border: 1px solid transparent;
       background: transparent;
       font-family: inherit;
@@ -291,7 +310,7 @@
     .table-total-row td {
       background-color: #f8fafc;
       font-weight: 800;
-      font-size: 0.9rem;
+      font-size: 0.88rem;
       color: var(--text-dark);
       border-top: 2px solid var(--primary-blue);
       border-bottom: 1px solid var(--border-light);
@@ -316,42 +335,24 @@
       background: none;
       border: none;
       color: #ef4444;
-      font-size: 1rem;
+      font-size: 0.95rem;
       cursor: pointer;
     }
 
-    .add-row-wrapper { margin-bottom: 16px; }
-
-    .btn-outline-sm {
-      background: transparent;
-      border: 1px solid var(--primary-blue);
-      color: var(--primary-blue);
-      padding: 3px 8px;
-      border-radius: 4px;
-      font-weight: 700;
-      font-size: 0.75rem;
-      cursor: pointer;
-    }
-
-    .btn-outline-sm:hover {
-      background: var(--primary-blue);
-      color: #ffffff;
-    }
-
-    /* Closing Assurance Paragraph */
+    /* Closing Assurance Positioned Below Table */
     .closing-assurance {
-      font-size: 1.05rem;
-      line-height: 1.0;
+      font-size: 0.85rem;
+      line-height: 1.4;
       color: var(--text-dark);
-      margin-bottom: 12px;
+      margin-top: 4px;
+      margin-bottom: 24px;
     }
 
     /* Bottom Signature Section */
     .invoice-bottom-section {
-      margin-top: auto;
       display: flex;
       justify-content: flex-end;
-      padding-top: 10px;
+      margin-top: auto;
     }
 
     .signature-block {
@@ -366,13 +367,13 @@
 
     .script-signature {
       font-family: 'Caveat', cursive;
-      font-size: 1.6rem;
+      font-size: 1.5rem;
       color: #1f2937;
       line-height: 0.9;
     }
 
     .signer-name {
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       font-weight: 800;
       color: #000000;
     }
@@ -382,6 +383,7 @@
       color: var(--text-muted);
     }
 
+    /* Top Buttons Styling */
     .btn {
       padding: 6px 14px;
       border-radius: 5px;
@@ -390,11 +392,27 @@
       cursor: pointer;
       border: none;
       transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .btn-add {
+      background-color: #10b981;
+      color: #ffffff;
+    }
+
+    .btn-add:hover {
+      background-color: #059669;
     }
 
     .btn-primary {
       background-color: var(--primary-blue);
       color: #ffffff;
+    }
+
+    .btn-primary:hover {
+      background-color: var(--primary-dark);
     }
 
     .btn-secondary {
@@ -408,10 +426,10 @@
       font-weight: 800 !important;
     }
 
-    /* Preview Mode */
-    body.preview-active .add-row-wrapper,
+    /* Preview Mode Controls */
     body.preview-active .col-action,
-    body.preview-active .btn-delete {
+    body.preview-active .btn-delete,
+    body.preview-active #addRowBtn {
       display: none !important;
     }
 
@@ -424,15 +442,20 @@
       user-select: text;
     }
 
-    /* Print Rules */
+    /* STRICT PRINT RULES FOR SINGLE PAGE */
     @media print {
       @page {
         size: A4 portrait;
         margin: 0;
       }
 
+      html, body {
+        width: 210mm;
+        height: 297mm;
+        overflow: hidden !important;
+      }
+
       .toolbar,
-      .add-row-wrapper,
       .col-action,
       .btn-delete {
         display: none !important;
@@ -448,12 +471,16 @@
         max-width: 100%;
         margin: 0;
         padding: 0;
+        height: 297mm;
       }
 
       .invoice-paper {
         box-shadow: none;
-        width: 100vw;
-        height: 100vh;
+        width: 210mm;
+        height: 297mm;
+        max-height: 297mm;
+        page-break-after: avoid !important;
+        page-break-inside: avoid !important;
       }
 
       input, textarea {
@@ -465,35 +492,37 @@
 </head>
 <body>
 
-  <!-- Top Toolbar -->
+  <!-- Top Navigation Control Toolbar -->
   <header class="toolbar">
     <div class="toolbar-inner">
       <div class="brand-info">
         <span class="brand-title">Nexus Global Traders</span>
       </div>
       <div class="toolbar-actions">
+        <button type="button" id="addRowBtn" class="btn btn-add">+ Add Quotation Item</button>
         <button type="button" id="toggleModeBtn" class="btn btn-secondary">Preview Mode</button>
         <button type="button" onclick="window.print()" class="btn btn-primary">Print / Save as PDF</button>
       </div>
     </div>
   </header>
 
-  <!-- Document Container -->
+  <!-- Main Invoice Document Container -->
   <div class="page-container">
     <article class="invoice-paper" id="quotationPaper">
 
-      <!-- Header Image -->
+      <!-- Header Letterhead -->
       <div class="letterhead-header">
         <img src="header1.jpg" alt="Header Image" onerror="this.style.display='none'">
       </div>
 
-      <!-- Main Body -->
+      <!-- Main Invoice Body -->
       <div class="invoice-body">
 
         <div class="header-title-container">
           <h1 class="main-invoice-title">QUOTATION</h1>
         </div>
 
+        <!-- Meta Receiver Info & Date -->
         <div class="meta-section">
           <div class="meta-left">
             <div class="recipient-block">
@@ -512,51 +541,48 @@
 
           <div class="meta-right">
             <div class="meta-field date-field-inline">
-              <span class="formatted-date" id="quotationDateDisplay">Dated: July, 26, 2026</span>
+              <span class="formatted-date" id="quotationDateDisplay">Dated: July 26, 2026</span>
             </div>
           </div>
         </div>
 
         <!-- Dynamic Items Table -->
-        <table class="item-table" id="itemTable">
-          <thead>
-            <tr>
-              <th class="col-item">Item Description</th>
-              <th class="col-qty">Qty</th>
-              <th class="col-rate">Rate (Rs.)</th>
-              <th class="col-amount">Amount (Rs.)</th>
-              <th class="col-action">&nbsp;</th>
-            </tr>
-          </thead>
-          <tbody id="itemTableBody">
-            <!-- Dynamic Rows Generated by JS -->
-          </tbody>
-          <tfoot>
-            <tr class="table-total-row">
-              <td colspan="3" style="text-align: right;">TOTAL AMOUNT :</td>
-              <td id="grandTotal" style="text-align: right; color: var(--primary-blue);">Rs. 0</td>
-              <td></td>
-            </tr>
-            <tr class="table-words-row">
-              <td colspan="4">
-                Amount in Words: <span id="amountInWords" class="words-value-text">Zero Rupees Only</span>
-              </td>
-              <td></td>
-            </tr>
-          </tfoot>
-        </table>
-
-        <!-- Table Control -->
-        <div class="add-row-wrapper">
-          <button type="button" id="addRowBtn" class="btn-outline-sm">+ Add Quotation Item</button>
+        <div class="item-table-wrapper">
+          <table class="item-table" id="itemTable">
+            <thead>
+              <tr>
+                <th class="col-item">Item Description</th>
+                <th class="col-qty">Qty</th>
+                <th class="col-rate">Rate (Rs.)</th>
+                <th class="col-amount">Amount (Rs.)</th>
+                <th class="col-action">&nbsp;</th>
+              </tr>
+            </thead>
+            <tbody id="itemTableBody">
+              <!-- Dynamic Rows Generated by JS -->
+            </tbody>
+            <tfoot>
+              <tr class="table-total-row">
+                <td colspan="3" style="text-align: right;">TOTAL AMOUNT :</td>
+                <td id="grandTotal" style="text-align: right; color: var(--primary-blue);">Rs. 0</td>
+                <td></td>
+              </tr>
+              <tr class="table-words-row">
+                <td colspan="4">
+                  Amount in Words: <span id="amountInWords" class="words-value-text">Zero Rupees Only</span>
+                </td>
+                <td></td>
+              </tr>
+            </tfoot>
+          </table>
         </div>
 
-        <!-- Closing Assurance Paragraph -->
+        <!-- Professional Closing Assurance Directly Below Table -->
         <p class="closing-assurance">
           We assure you that our prices reflect the superior quality of our products and we look forward to your favorable response.
         </p>
 
-        <!-- Bottom Signature Section -->
+        <!-- Bottom Signature Area -->
         <div class="invoice-bottom-section">
           <div class="signature-block">
             <div class="signer-salutation">Warm regards:</div>
@@ -568,7 +594,7 @@
 
       </div>
 
-      <!-- Footer Image -->
+      <!-- Footer Letterhead -->
       <div class="letterhead-footer">
         <img src="footer2.jpg" alt="Footer Image" onerror="this.style.display='none'">
       </div>
@@ -576,7 +602,7 @@
     </article>
   </div>
 
-  <!-- Dynamic Item Row Template -->
+  <!-- Dynamic Row Template -->
   <template id="rowTemplate">
     <tr class="item-row">
       <td class="col-item">
@@ -597,7 +623,7 @@
     </tr>
   </template>
 
-  <!-- Embedded Script -->
+  <!-- Embedded Calculation & Dynamic Resizing Logic -->
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       const itemTableBody = document.getElementById('itemTableBody');
@@ -608,18 +634,19 @@
       const quotationDateDisplay = document.getElementById('quotationDateDisplay');
       const toggleModeBtn = document.getElementById('toggleModeBtn');
 
-      // Date Setting
+      // Set Current Date Dynamically without line breaks
       const now = new Date();
       const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-      const formattedDateString = `Dated: ${monthNames[now.getMonth()]}, ${now.getDate()}, ${now.getFullYear()}`;
+      const formattedDateString = `Dated: ${monthNames[now.getMonth()]} ${now.getDate()}, ${now.getFullYear()}`;
       
       if (quotationDateDisplay) {
         quotationDateDisplay.textContent = formattedDateString;
       }
 
-      // Initial Default Data
+      // Initial Default Items
       const defaultItems = [
         { desc: 'Fresh Boneless Beef (A-Grade Quality Export Standard)', qty: 50, rate: 1250 },
+        { desc: 'Frozen Mutton Leg Cuts (Premium Hygienic Packaging)', qty: 30, rate: 2100 },
         { desc: 'Frozen Mutton Leg Cuts (Premium Hygienic Packaging)', qty: 30, rate: 2100 }
       ];
 
@@ -650,7 +677,7 @@
 
       function autoResizeTextarea(textarea) {
         textarea.style.height = 'auto';
-        textarea.style.height = textarea.scrollHeight + 'px';
+        textarea.style.height = (textarea.scrollHeight + 2) + 'px';
       }
 
       function createRow(desc = '', qty = 1, rate = 0) {
